@@ -1,0 +1,44 @@
+import { Metadata } from "next"
+import { Navbar } from "@/components/Navbar"
+import { Hero } from "@/components/Hero"
+import { SocialProof } from "@/components/SocialProof"
+import { ProblemSection } from "@/components/ProblemSection"
+import { FeaturesSection } from "@/components/FeaturesSection"
+import { HowItWorks } from "@/components/HowItWorks"
+import { ToolSupport } from "@/components/ToolSupport"
+import { FAQSection } from "@/components/FAQSection"
+import { FinalCTA, Footer } from "@/components/FinalCTA"
+
+export const metadata: Metadata = {
+  title: "DexAudit | Surgical AI Spend Intelligence for Startups",
+  description: "Detect seat-leakage and optimize your engineering capital. The #1 audit engine for Cursor, Claude, and GPT-4 team stacks.",
+  openGraph: {
+    title: "DexAudit | Surgical AI Spend Intelligence",
+    description: "Detect seat-leakage and optimize your engineering capital.",
+    type: "website",
+    url: "https://dexaudit.com",
+    siteName: "DexAudit",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DexAudit | Surgical AI Spend Intelligence",
+    description: "Detect seat-leakage and optimize your engineering capital.",
+  },
+}
+
+export default function Home() {
+  return (
+    <main className="min-h-screen selection:bg-primary/10 selection:text-primary">
+      <Navbar />
+      <Hero />
+      <SocialProof />
+      <ProblemSection />
+      <FeaturesSection />
+      <HowItWorks />
+      <ToolSupport />
+      <FAQSection />
+      <FinalCTA />
+      <Footer />
+    </main>
+  )
+}
