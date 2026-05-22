@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Terminal } from "lucide-react"
@@ -48,7 +50,7 @@ export function Footer() {
             </p>
           </div>
           
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-12 md:gap-24">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-12 md:gap-24">
              <div>
                 <h3 className="font-bold text-slate-900 mb-4 uppercase tracking-widest text-[10px]">Product</h3>
                 <ul className="space-y-2 text-sm text-muted-foreground">
@@ -65,13 +67,18 @@ export function Footer() {
                    <li><a href="#" className="hover:text-primary transition-colors">Blog</a></li>
                 </ul>
              </div>
-             <div className="col-span-2 sm:col-span-1">
-                <h3 className="font-bold text-slate-900 mb-4 uppercase tracking-widest text-[10px]">Connect</h3>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                   <li><a href="#" className="hover:text-primary transition-colors">GitHub</a></li>
-                   <li><a href="#" className="hover:text-primary transition-colors">X / Twitter</a></li>
-                   <li><a href="#" className="hover:text-primary transition-colors">LinkedIn</a></li>
-                </ul>
+             <div className="col-span-2">
+                <h3 className="font-bold text-slate-900 mb-4 uppercase tracking-widest text-[10px]">Stay Updated</h3>
+                <p className="text-sm text-muted-foreground mb-4">Get the latest AI cost benchmarks delivered to your inbox.</p>
+                <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); alert('Subscribed!'); }}>
+                   <input 
+                      type="email" 
+                      placeholder="name@company.com" 
+                      className="flex-1 px-3 py-2 rounded-md border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      required
+                   />
+                   <Button type="submit" size="sm">Subscribe</Button>
+                </form>
              </div>
           </div>
         </div>

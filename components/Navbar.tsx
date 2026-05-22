@@ -3,6 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { AuthModal } from "@/components/AuthModal"
 import { cn } from "@/lib/utils"
 import { Menu, X, Terminal } from "lucide-react"
 
@@ -37,7 +38,10 @@ export function Navbar() {
           </div>
 
           {/* CTA */}
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-4">
+            <AuthModal>
+               <Button variant="ghost" size="sm">Sign In</Button>
+            </AuthModal>
             <Button size="sm">Start Audit</Button>
           </div>
 
@@ -78,7 +82,10 @@ export function Navbar() {
             >
               Documentation
             </Link>
-            <div className="pt-4 px-3">
+            <div className="pt-4 px-3 flex flex-col gap-2">
+              <AuthModal>
+                <Button variant="outline" className="w-full">Sign In</Button>
+              </AuthModal>
               <Button className="w-full">Start Audit</Button>
             </div>
           </div>
