@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 
 export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
   const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [role, setRole] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -24,41 +26,67 @@ export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-lg space-y-8 rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-2xl"
+        className="w-full max-w-lg space-y-6 rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-2xl"
       >
-        <div className="space-y-4">
+        <div className="space-y-3">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             <Lock size={32} />
           </div>
           <h2 className="text-3xl font-black tracking-tighter text-slate-900">
             Unlock Your Full Audit
           </h2>
-          <p className="font-medium leading-relaxed text-slate-500">
-            We&apos;ve detected significant savings. Enter your work email to view the detailed
+          <p className="text-sm font-medium leading-relaxed text-slate-500">
+            We&apos;ve detected significant savings. Enter your details to view the detailed
             tool-by-tool breakdown and implementation plan.
           </p>{" "}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 text-left">
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <label className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
               Work Email
             </label>
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+              <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <Input
                 type="email"
                 required
                 placeholder="john@company.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-14 rounded-2xl border-slate-200 bg-slate-50/50 pl-12 focus:ring-primary/20"
+                className="h-12 rounded-xl border-slate-200 bg-slate-50/50 pl-11 focus:ring-primary/20"
               />
             </div>
           </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                Company (Optional)
+              </label>
+              <Input
+                placeholder="Acme AI"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                className="h-12 rounded-xl border-slate-200 bg-slate-50/50 focus:ring-primary/20"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                Role (Optional)
+              </label>
+              <Input
+                placeholder="CTO / Eng Lead"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="h-12 rounded-xl border-slate-200 bg-slate-50/50 focus:ring-primary/20"
+              />
+            </div>
+          </div>
+
           <Button
             type="submit"
-            className="h-14 w-full rounded-2xl text-lg font-black shadow-xl"
+            className="mt-2 h-14 w-full rounded-2xl text-lg font-black shadow-xl"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Generating Report..." : "Get Detailed Results"}

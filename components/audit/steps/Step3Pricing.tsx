@@ -98,7 +98,11 @@ export function Step3Pricing() {
                       id={`${tool.id}-spend`}
                       type="number"
                       placeholder="0"
-                      className="h-11 border-slate-200 bg-slate-50/50 pl-7"
+                      className={`h-11 border-slate-200 bg-slate-50/50 pl-7 transition-colors ${
+                        detail.monthlySpend === 0 && detail.plan !== ""
+                          ? "border-red-300 focus:border-red-400 focus:ring-red-500/10"
+                          : ""
+                      }`}
                       value={detail.monthlySpend || ""}
                       onChange={(e) =>
                         updateToolDetail(tool.id, { monthlySpend: parseFloat(e.target.value) || 0 })
@@ -118,7 +122,11 @@ export function Step3Pricing() {
                     id={`${tool.id}-seats`}
                     type="number"
                     placeholder="0"
-                    className="h-11 border-slate-200 bg-slate-50/50"
+                    className={`h-11 border-slate-200 bg-slate-50/50 transition-colors ${
+                      detail.seats === 0 && detail.plan !== ""
+                        ? "border-red-300 focus:border-red-400 focus:ring-red-500/10"
+                        : ""
+                    }`}
                     value={detail.seats || ""}
                     onChange={(e) =>
                       updateToolDetail(tool.id, { seats: parseInt(e.target.value) || 0 })

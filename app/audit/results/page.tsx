@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuditStore } from "@/lib/store/useAuditStore";
 import { Navbar } from "@/components/Navbar";
 import { ScanningTerminal } from "@/components/audit/results/ScanningTerminal";
@@ -12,13 +12,22 @@ import { runSurgicalAudit } from "@/lib/audit-engine";
 import { encodeAuditData } from "@/lib/share";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Share2, Download, Rocket, ArrowRight, Check } from "lucide-react";
+import { Share2, Download, Rocket, ArrowRight, Check, Twitter, Linkedin, Sparkles } from "lucide-react";
 
 export default function ResultsPage() {
   const [isScanning, setIsScanning] = useState(true);
   const [isLocked, setIsLocked] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [aiLoading, setAiLoading] = useState(true);
   const { selectedTools, teamSize, toolDetails } = useAuditStore();
+
+  // Simulate AI Summary loading
+  useEffect(() => {
+    if (!isScanning && !isLocked) {
+      const timer = setTimeout(() => setAiLoading(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isScanning, isLocked]);
 
   // Generate results once scanning is done
   const auditResults = runSurgicalAudit(selectedTools, toolDetails, teamSize);
@@ -75,9 +84,13 @@ export default function ResultsPage() {
                   </p>
                 </div>
                 <div className="flex gap-3">
-                  <Button variant="outline" className="h-11 rounded-xl bg-white font-bold">
-                    <Download className="mr-2 h-4 w-4" />
-                    PDF Report
+                  <Button variant="outline" className="h-11 rounded-xl bg-white font-bold hover:bg-slate-50">
+                    <Twitter className="mr-2 h-4 w-4 text-[#1DA1F2]" />
+                    Share on X
+                  </Button>
+                  <Button variant="outline" className="h-11 rounded-xl bg-white font-bold hover:bg-slate-50">
+                    <Linkedin className="mr-2 h-4 w-4 text-[#0A66C2]" />
+                    Post
                   </Button>
                   <Button
                     onClick={handleShare}
@@ -91,11 +104,42 @@ export default function ResultsPage() {
                     ) : (
                       <>
                         <Share2 className="mr-2 h-4 w-4" />
-                        Share Audit
+                        Copy Link
                       </>
                     )}
                   </Button>
                 </div>
+              </div>
+
+              {/* AI Summary Section */}
+              <div className="rounded-3xl border border-primary/10 bg-white p-8 shadow-sm">
+                <div className="mb-6 flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <Sparkles size={18} />
+                  </div>
+                  <h2 className="text-lg font-black tracking-tight text-slate-900">
+                    AI-Generated Intelligence Summary
+                  </h2>
+                </div>
+                
+                {aiLoading ? (
+                  <div className="space-y-3">
+                    <div className="h-4 w-full animate-pulse rounded-full bg-slate-100" />
+                    <div className="h-4 w-[90%] animate-pulse rounded-full bg-slate-100" />
+                    <div className="h-4 w-[95%] animate-pulse rounded-full bg-slate-100" />
+                    <div className="mt-4 h-4 w-[40%] animate-pulse rounded-full bg-slate-100" />
+                  </div>
+                ) : (
+                  <div className="relative">
+                    <p className="text-lg font-medium leading-relaxed text-slate-600">
+                      Based on your current stack of {selectedTools.length} tools, we&apos;ve identified a significant plan mismatch in your {selectedTools[0]} setup. By migrating to a centralized Team plan, you can consolidate seat management and unlock roughly ${Math.round(totalAnnualSavings / 12)} in monthly liquidity without impacting developer velocity.
+                    </p>
+                    <div className="mt-6 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary">
+                      <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
+                      Analysis complete via Anthropic Claude 3.5 Sonnet
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Hero Section */}
