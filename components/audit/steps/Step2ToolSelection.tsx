@@ -4,29 +4,8 @@ import { useAuditStore } from "@/lib/store/useAuditStore";
 import { SUPPORTED_TOOLS } from "@/lib/tools";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle2,
-  Search,
-  Cpu,
-  Code2,
-  Bot,
-  Sparkles,
-  Terminal,
-  Layout,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, Search } from "lucide-react";
 import { useState } from "react";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const LOGO_MAP: Record<string, any> = {
-  cursor: Code2,
-  claude: Bot,
-  chatgpt: Sparkles,
-  gemini: Cpu,
-  "github-copilot": Terminal,
-  v0: Layout,
-};
 
 export function Step2ToolSelection() {
   const { selectedTools, toggleTool, nextStep, prevStep } = useAuditStore();
@@ -61,7 +40,6 @@ export function Step2ToolSelection() {
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
         {filteredTools.map((tool) => {
           const isSelected = selectedTools.includes(tool.id);
-          const Icon = LOGO_MAP[tool.id] || Sparkles;
 
           return (
             <button
@@ -75,19 +53,24 @@ export function Step2ToolSelection() {
               )}
             >
               {isSelected && (
-                <div className="absolute right-3 top-3 text-primary duration-300 animate-in zoom-in">
-                  <CheckCircle2 className="h-5 w-5 fill-white" />
+                <div className="absolute right-3 top-3 text-primary text-white duration-300 animate-in zoom-in">
+                  <CheckCircle2 className="h-5 w-5 fill-primary" />
                 </div>
               )}
               <div
                 className={cn(
-                  "flex h-14 w-14 items-center justify-center rounded-xl border transition-all duration-300 group-hover:scale-110",
+                  "flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl border transition-all duration-300 group-hover:scale-110",
                   isSelected
                     ? "border-primary/20 bg-white shadow-inner"
                     : "border-slate-100 bg-slate-50 shadow-sm"
                 )}
               >
-                <Icon size={28} className={isSelected ? "text-primary" : "text-slate-400"} />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={tool.logo}
+                  alt={tool.name}
+                  className={cn("h-8 w-8 object-contain", !isSelected && "opacity-70 grayscale")}
+                />
               </div>
               <div className="text-center">
                 <div className="text-sm font-bold leading-tight text-slate-900">{tool.name}</div>

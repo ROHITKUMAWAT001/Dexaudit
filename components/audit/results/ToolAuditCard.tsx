@@ -1,32 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  Info,
-  AlertTriangle,
-  CheckCircle2,
-  Code2,
-  Bot,
-  Sparkles,
-  Cpu,
-  Terminal,
-  Layout,
-} from "lucide-react";
+import { ArrowRight, Info, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { AuditResult } from "@/lib/audit-engine";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const LOGO_MAP: Record<string, any> = {
-  cursor: Code2,
-  claude: Bot,
-  chatgpt: Sparkles,
-  gemini: Cpu,
-  "github-copilot": Terminal,
-  v0: Layout,
-};
+import { SUPPORTED_TOOLS } from "@/lib/tools";
 
 export function ToolAuditCard({ result }: { result: AuditResult }) {
-  const Icon = LOGO_MAP[result.toolId] || Sparkles;
+  const tool = SUPPORTED_TOOLS.find((t) => t.id === result.toolId);
   const hasSavings = result.savings > 0;
 
   return (
@@ -37,8 +17,9 @@ export function ToolAuditCard({ result }: { result: AuditResult }) {
     >
       <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-100 bg-slate-50 text-primary shadow-sm">
-            <Icon size={28} />
+          <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 shadow-sm">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={tool?.logo} alt={result.toolName} className="h-8 w-8 object-contain" />
           </div>
           <div>
             <h3 className="text-lg font-black text-slate-900">{result.toolName}</h3>

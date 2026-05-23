@@ -5,27 +5,7 @@ import { SUPPORTED_TOOLS } from "@/lib/tools";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  ArrowLeft,
-  ArrowRight,
-  TrendingDown,
-  Code2,
-  Bot,
-  Sparkles,
-  Cpu,
-  Terminal,
-  Layout,
-} from "lucide-react";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const LOGO_MAP: Record<string, any> = {
-  cursor: Code2,
-  claude: Bot,
-  chatgpt: Sparkles,
-  gemini: Cpu,
-  "github-copilot": Terminal,
-  v0: Layout,
-};
+import { ArrowLeft, ArrowRight, TrendingDown } from "lucide-react";
 
 export function Step3Pricing() {
   const { selectedTools, toolDetails, updateToolDetail, nextStep, prevStep } = useAuditStore();
@@ -49,7 +29,6 @@ export function Step3Pricing() {
       <div className="space-y-6">
         {tools.map((tool) => {
           const detail = toolDetails[tool.id] || { plan: "", monthlySpend: 0, seats: 0 };
-          const Icon = LOGO_MAP[tool.id] || Sparkles;
 
           return (
             <div
@@ -58,8 +37,9 @@ export function Step3Pricing() {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-100 bg-slate-50 text-primary shadow-sm">
-                    <Icon size={20} strokeWidth={2.5} />
+                  <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50 shadow-sm">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={tool.logo} alt={tool.name} className="h-6 w-6 object-contain" />
                   </div>
                   <div>
                     <h3 className="font-bold text-slate-900">{tool.name}</h3>

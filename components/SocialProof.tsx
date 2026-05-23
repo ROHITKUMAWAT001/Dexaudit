@@ -44,8 +44,8 @@ export function SocialProof() {
         {/* Logo Carousel (Static for now, but styled for motion) */}
         <div className="mb-20 flex flex-wrap items-center justify-center gap-8 opacity-40 grayscale transition-all duration-500 hover:opacity-100 hover:grayscale-0 md:gap-16">
           {startups.map((startup) => (
-            <div key={startup.name} className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 font-bold text-slate-400">
+            <div key={startup.name} className="flex h-10 items-center gap-2">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-slate-100 font-bold text-slate-400">
                 {startup.logo}
               </div>
               <span className="text-lg font-bold text-slate-900">{startup.name}</span>

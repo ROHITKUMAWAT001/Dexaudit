@@ -62,7 +62,7 @@ export function HowItWorks() {
               >
                 {/* Icon Circle */}
                 <div
-                  className={`h-24 w-24 rounded-3xl ${step.bgColor} flex items-center justify-center ${step.color} relative mb-8 shadow-sm transition-transform duration-500 group-hover:scale-110`}
+                  className={`flex h-24 w-24 flex-shrink-0 items-center justify-center rounded-3xl ${step.bgColor} ${step.color} relative mb-8 shadow-sm transition-transform duration-500 group-hover:scale-110`}
                 >
                   <step.icon size={32} />
                   <div className="absolute -right-2 -top-2 flex h-8 w-8 items-center justify-center rounded-full border bg-white text-xs font-bold text-slate-900 shadow-sm">
