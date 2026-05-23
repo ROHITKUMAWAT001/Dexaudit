@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface ProgressBarProps {
-  current: number
-  total: number
-  className?: string
+  current: number;
+  total: number;
+  className?: string;
 }
 
 export function ProgressBar({ current, total, className }: ProgressBarProps) {
-  const percentage = (current / total) * 100
+  const percentage = (current / total) * 100;
 
   return (
-    <div className={cn("h-1.5 w-full bg-slate-100 overflow-hidden", className)}>
+    <div className={cn("h-1.5 w-full overflow-hidden bg-slate-100", className)}>
       <motion.div
         className="h-full bg-primary"
         initial={{ width: 0 }}
@@ -22,5 +22,5 @@ export function ProgressBar({ current, total, className }: ProgressBarProps) {
         transition={{ duration: 0.5, ease: "easeInOut" }}
       />
     </div>
-  )
+  );
 }

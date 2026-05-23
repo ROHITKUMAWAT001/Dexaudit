@@ -1,10 +1,10 @@
 export interface AITool {
-  id: string
-  name: string
-  category: string
-  logo: string
-  description: string
-  plans: string[]
+  id: string;
+  name: string;
+  category: string;
+  logo: string;
+  description: string;
+  plans: string[];
 }
 
 export const SUPPORTED_TOOLS: AITool[] = [
@@ -14,7 +14,7 @@ export const SUPPORTED_TOOLS: AITool[] = [
     category: "IDE",
     logo: "/tools/cursor.svg",
     description: "The AI Code Editor",
-    plans: ["Hobby", "Pro", "Business"]
+    plans: ["Hobby", "Pro", "Business"],
   },
   {
     id: "claude",
@@ -22,7 +22,7 @@ export const SUPPORTED_TOOLS: AITool[] = [
     category: "Model",
     logo: "/tools/claude.svg",
     description: "Anthropic's LLM",
-    plans: ["Free", "Pro", "Team"]
+    plans: ["Free", "Pro", "Team"],
   },
   {
     id: "chatgpt",
@@ -30,7 +30,7 @@ export const SUPPORTED_TOOLS: AITool[] = [
     category: "Model",
     logo: "/tools/chatgpt.svg",
     description: "OpenAI's LLM",
-    plans: ["Free", "Plus", "Team", "Enterprise"]
+    plans: ["Free", "Plus", "Team", "Enterprise"],
   },
   {
     id: "gemini",
@@ -38,7 +38,7 @@ export const SUPPORTED_TOOLS: AITool[] = [
     category: "Model",
     logo: "/tools/gemini.svg",
     description: "Google's LLM",
-    plans: ["Free", "Advanced", "Business", "Enterprise"]
+    plans: ["Free", "Advanced", "Business", "Enterprise"],
   },
   {
     id: "github-copilot",
@@ -46,7 +46,7 @@ export const SUPPORTED_TOOLS: AITool[] = [
     category: "Assistant",
     logo: "/tools/copilot.svg",
     description: "AI pair programmer",
-    plans: ["Individual", "Business", "Enterprise"]
+    plans: ["Individual", "Business", "Enterprise"],
   },
   {
     id: "v0",
@@ -54,6 +54,6 @@ export const SUPPORTED_TOOLS: AITool[] = [
     category: "UI Generation",
     logo: "/tools/v0.svg",
     description: "Vercel's Generative UI",
-    plans: ["Free", "Premium", "Team"]
-  }
-]
+    plans: ["Free", "Premium", "Team"],
+  },
+];

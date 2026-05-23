@@ -1,58 +1,77 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { ArrowRight, Info, AlertTriangle, CheckCircle2, Code2, Bot, Sparkles, Cpu, Terminal, Layout } from "lucide-react"
-import { AuditResult } from "@/lib/audit-engine"
-import { cn } from "@/lib/utils"
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  Info,
+  AlertTriangle,
+  CheckCircle2,
+  Code2,
+  Bot,
+  Sparkles,
+  Cpu,
+  Terminal,
+  Layout,
+} from "lucide-react";
+import { AuditResult } from "@/lib/audit-engine";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const LOGO_MAP: Record<string, any> = {
   cursor: Code2,
   claude: Bot,
   chatgpt: Sparkles,
   gemini: Cpu,
   "github-copilot": Terminal,
-  v0: Layout
-}
+  v0: Layout,
+};
 
 export function ToolAuditCard({ result }: { result: AuditResult }) {
-  const Icon = LOGO_MAP[result.toolId] || Sparkles
-  const hasSavings = result.savings > 0
+  const Icon = LOGO_MAP[result.toolId] || Sparkles;
+  const hasSavings = result.savings > 0;
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-lg transition-all"
+      className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-lg"
     >
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-50 border border-slate-100 text-primary shadow-sm">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-100 bg-slate-50 text-primary shadow-sm">
             <Icon size={28} />
           </div>
           <div>
             <h3 className="text-lg font-black text-slate-900">{result.toolName}</h3>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{result.category}</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              {result.category}
+            </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-6 px-6 py-3 bg-slate-50 rounded-2xl border border-slate-100">
-           <div className="text-center">
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Current</div>
-              <div className="text-sm font-bold text-slate-500 line-through">${result.currentSpend}</div>
-           </div>
-           <ArrowRight className="text-slate-300 h-4 w-4" />
-           <div className="text-center">
-              <div className="text-[10px] font-bold text-primary uppercase tracking-widest mb-0.5">Optimized</div>
-              <div className="text-lg font-black text-slate-900">${result.optimizedSpend}</div>
-           </div>
+        <div className="flex items-center gap-6 rounded-2xl border border-slate-100 bg-slate-50 px-6 py-3">
+          <div className="text-center">
+            <div className="mb-0.5 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              Current
+            </div>
+            <div className="text-sm font-bold text-slate-500 line-through">
+              ${result.currentSpend}
+            </div>
+          </div>
+          <ArrowRight className="h-4 w-4 text-slate-300" />
+          <div className="text-center">
+            <div className="mb-0.5 text-[10px] font-bold uppercase tracking-widest text-primary">
+              Optimized
+            </div>
+            <div className="text-lg font-black text-slate-900">${result.optimizedSpend}</div>
+          </div>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-3">
-          <div className="flex items-start gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-100 h-full">
-            <Info className="h-4 w-4 text-slate-400 mt-1 shrink-0" />
-            <p className="text-sm text-slate-600 font-medium leading-relaxed">
+          <div className="flex h-full items-start gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-4">
+            <Info className="mt-1 h-4 w-4 shrink-0 text-slate-400" />
+            <p className="text-sm font-medium leading-relaxed text-slate-600">
               {result.recommendation}
             </p>
           </div>
@@ -60,34 +79,45 @@ export function ToolAuditCard({ result }: { result: AuditResult }) {
 
         <div className="space-y-3">
           {hasSavings ? (
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-700">
-               <div className="flex items-center gap-2">
-                  <AlertTriangle size={16} />
-                  <span className="text-[10px] font-bold uppercase tracking-widest">Savings Potential</span>
-               </div>
-               <div className="text-xl font-black">${result.savings}/mo</div>
+            <div className="flex items-center justify-between rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-emerald-700">
+              <div className="flex items-center gap-2">
+                <AlertTriangle size={16} />
+                <span className="text-[10px] font-bold uppercase tracking-widest">
+                  Savings Potential
+                </span>
+              </div>
+              <div className="text-xl font-black">${result.savings}/mo</div>
             </div>
           ) : (
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 text-slate-400">
-               <div className="flex items-center gap-2">
-                  <CheckCircle2 size={16} />
-                  <span className="text-[10px] font-bold uppercase tracking-widest">Fully Optimized</span>
-               </div>
-               <div className="text-xl font-black">$0</div>
+            <div className="flex items-center justify-between rounded-2xl border border-slate-100 bg-slate-50 p-4 text-slate-400">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={16} />
+                <span className="text-[10px] font-bold uppercase tracking-widest">
+                  Fully Optimized
+                </span>
+              </div>
+              <div className="text-xl font-black">$0</div>
             </div>
           )}
 
           <div className="flex items-center justify-between px-4 py-2">
-             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Confidence Score</span>
-             <div className="flex items-center gap-2">
-                <div className="h-1.5 w-24 bg-slate-100 rounded-full overflow-hidden">
-                   <div className="h-full bg-primary" style={{ width: `${result.confidence * 100}%` }} />
-                </div>
-                <span className="text-[10px] font-bold text-slate-900">{Math.round(result.confidence * 100)}%</span>
-             </div>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              Confidence Score
+            </span>
+            <div className="flex items-center gap-2">
+              <div className="h-1.5 w-24 overflow-hidden rounded-full bg-slate-100">
+                <div
+                  className="h-full bg-primary"
+                  style={{ width: `${result.confidence * 100}%` }}
+                />
+              </div>
+              <span className="text-[10px] font-bold text-slate-900">
+                {Math.round(result.confidence * 100)}%
+              </span>
+            </div>
           </div>
         </div>
       </div>
     </motion.div>
-  )
+  );
 }

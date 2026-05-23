@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { Footer } from "@/components/Footer";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -16,7 +17,8 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "DexAudit | Industrial-Grade AI Spend Intelligence",
-  description: "Tactile precision audit engine for your AI tool stack. Built for startups that value mechanical reliability and fiscal clarity.",
+  description:
+    "Tactile precision audit engine for your AI tool stack. Built for startups that value mechanical reliability and fiscal clarity.",
 };
 
 export default function RootLayout({
@@ -27,9 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${inter.variable} ${jetbrainsMono.variable} flex min-h-screen flex-col antialiased`}
       >
-        {children}
+        <div className="flex-1">{children}</div>
+        <Footer />
       </body>
     </html>
   );

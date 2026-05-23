@@ -1,17 +1,19 @@
-import { Metadata } from "next"
-import { Navbar } from "@/components/Navbar"
-import { Hero } from "@/components/Hero"
-import { SocialProof } from "@/components/SocialProof"
-import { ProblemSection } from "@/components/ProblemSection"
-import { FeaturesSection } from "@/components/FeaturesSection"
-import { HowItWorks } from "@/components/HowItWorks"
-import { ToolSupport } from "@/components/ToolSupport"
-import { FAQSection } from "@/components/FAQSection"
-import { FinalCTA, Footer } from "@/components/FinalCTA"
+import { Metadata } from "next";
+import { Navbar } from "@/components/Navbar";
+import { Hero } from "@/components/Hero";
+import { SocialProof } from "@/components/SocialProof";
+import { ProblemSection } from "@/components/ProblemSection";
+import { FeaturesSection } from "@/components/FeaturesSection";
+import { HowItWorks } from "@/components/HowItWorks";
+import { ToolSupport } from "@/components/ToolSupport";
+import { FAQSection } from "@/components/FAQSection";
+import { FinalCTA } from "@/components/FinalCTA";
+import { StickyMobileCTA } from "@/components/StickyMobileCTA";
 
 export const metadata: Metadata = {
   title: "DexAudit | Surgical AI Spend Intelligence for Startups",
-  description: "Detect seat-leakage and optimize your engineering capital. The #1 audit engine for Cursor, Claude, and GPT-4 team stacks.",
+  description:
+    "Detect seat-leakage and optimize your engineering capital. The #1 audit engine for Cursor, Claude, and GPT-4 team stacks.",
   openGraph: {
     title: "DexAudit | Surgical AI Spend Intelligence",
     description: "Detect seat-leakage and optimize your engineering capital.",
@@ -24,7 +26,7 @@ export const metadata: Metadata = {
     title: "DexAudit | Surgical AI Spend Intelligence",
     description: "Detect seat-leakage and optimize your engineering capital.",
   },
-}
+};
 
 export default function Home() {
   return (
@@ -38,7 +40,7 @@ export default function Home() {
       <ToolSupport />
       <FAQSection />
       <FinalCTA />
-      <Footer />
+      <StickyMobileCTA />
     </main>
-  )
+  );
 }
