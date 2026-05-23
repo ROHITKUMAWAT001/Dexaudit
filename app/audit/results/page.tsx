@@ -12,6 +12,7 @@ import { runSurgicalAudit } from "@/lib/audit-engine";
 import { encodeAuditData } from "@/lib/share";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Share2, Download, Rocket, ArrowRight, Check, Twitter, Linkedin, Sparkles } from "lucide-react";
 
 export default function ResultsPage() {
@@ -124,10 +125,10 @@ export default function ResultsPage() {
                 
                 {aiLoading ? (
                   <div className="space-y-3">
-                    <div className="h-4 w-full animate-pulse rounded-full bg-slate-100" />
-                    <div className="h-4 w-[90%] animate-pulse rounded-full bg-slate-100" />
-                    <div className="h-4 w-[95%] animate-pulse rounded-full bg-slate-100" />
-                    <div className="mt-4 h-4 w-[40%] animate-pulse rounded-full bg-slate-100" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-[92%]" />
+                    <Skeleton className="h-4 w-[95%]" />
+                    <Skeleton className="h-4 w-[40%] mt-4" />
                   </div>
                 ) : (
                   <div className="relative">

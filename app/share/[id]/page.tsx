@@ -8,16 +8,24 @@ import { ToolAuditCard } from "@/components/audit/results/ToolAuditCard";
 import { SavingsCharts } from "@/components/audit/results/SavingsChart";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight, BarChart3, ShieldCheck, Globe } from "lucide-react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 export default function PublicSharePage() {
   const params = useParams();
+  const [isLoading, setIsLoading] = useState(true);
   const shareData = params.id as string;
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const data = decodeAuditData(shareData);
 
-  if (!data) {
+  if (!data && !isLoading) {
     return (
       <div className="flex h-screen items-center justify-center bg-slate-50">
         <div className="space-y-4 text-center">
@@ -35,6 +43,34 @@ export default function PublicSharePage() {
   const totalMonthlyCurrent = results.reduce((acc, r) => acc + r.currentSpend, 0);
   const totalMonthlyOptimized = results.reduce((acc, r) => acc + r.optimizedSpend, 0);
   const totalAnnualSavings = (totalMonthlyCurrent - totalMonthlyOptimized) * 12;
+
+  if (isLoading) {
+    return (
+      <main className="min-h-screen bg-slate-50/50 pb-20 pt-24">
+        <Navbar />
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="space-y-12">
+            <div className="flex flex-col gap-4 border-b border-slate-200 pb-8 sm:flex-row sm:items-center sm:justify-between">
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-8 w-64" />
+              </div>
+              <Skeleton className="h-12 w-48 rounded-xl" />
+            </div>
+            <div className="grid gap-6 sm:grid-cols-3">
+              <Skeleton className="h-40 rounded-3xl" />
+              <Skeleton className="h-40 rounded-3xl" />
+              <Skeleton className="h-40 rounded-3xl" />
+            </div>
+            <div className="space-y-4">
+              <Skeleton className="h-8 w-48" />
+              <Skeleton className="h-[400px] rounded-3xl" />
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-slate-50/50 pb-20 pt-24">
