@@ -9,13 +9,15 @@ import { ToolAuditCard } from "@/components/audit/results/ToolAuditCard"
 import { SavingsCharts } from "@/components/audit/results/SavingsChart"
 import { EmailAuditGate } from "@/components/audit/results/EmailAuditGate"
 import { runSurgicalAudit } from "@/lib/audit-engine"
+import { encodeAuditData } from "@/lib/share"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Share2, Download, Rocket, ArrowRight } from "lucide-react"
+import { Share2, Download, Rocket, ArrowRight, Check } from "lucide-react"
 
 export default function ResultsPage() {
   const [isScanning, setIsScanning] = useState(true)
   const [isLocked, setIsLocked] = useState(true)
+  const [copied, setCopied] = useState(false)
   const { selectedTools, teamSize, toolDetails } = useAuditStore()
 
   // Generate results once scanning is done
@@ -24,6 +26,14 @@ export default function ResultsPage() {
   const totalMonthlyCurrent = auditResults.reduce((acc, r) => acc + r.currentSpend, 0)
   const totalMonthlyOptimized = auditResults.reduce((acc, r) => acc + r.optimizedSpend, 0)
   const totalAnnualSavings = (totalMonthlyCurrent - totalMonthlyOptimized) * 12
+
+  const handleShare = () => {
+    const shareId = encodeAuditData({ teamSize, companyStage: useAuditStore.getState().companyStage, results: auditResults })
+    const url = `${window.location.origin}/share/${shareId}`
+    navigator.clipboard.writeText(url)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   return (
     <main className="min-h-screen bg-slate-50/50 pt-24 pb-20">
@@ -64,9 +74,21 @@ export default function ResultsPage() {
                       <Download className="mr-2 h-4 w-4" />
                       PDF Report
                    </Button>
-                   <Button className="h-11 rounded-xl font-bold shadow-lg shadow-primary/20">
-                      <Share2 className="mr-2 h-4 w-4" />
-                      Share Audit
+                   <Button 
+                     onClick={handleShare}
+                     className="h-11 rounded-xl font-bold shadow-lg shadow-primary/20 min-w-[140px]"
+                   >
+                      {copied ? (
+                        <>
+                          <Check className="mr-2 h-4 w-4 text-emerald-400" />
+                          Copied Link
+                        </>
+                      ) : (
+                        <>
+                          <Share2 className="mr-2 h-4 w-4" />
+                          Share Audit
+                        </>
+                      )}
                    </Button>
                 </div>
               </div>
