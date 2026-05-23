@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ArrowRight } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export function Step1Context() {
-  const { teamSize, companyStage, primaryUseCase, aiMaturity, setContext, nextStep } = useAuditStore()
+  const { teamSize, companyStage, primaryUseCase, aiMaturity, toolUsageFrequency, setContext, nextStep } = useAuditStore()
 
   const canContinue = teamSize && companyStage && primaryUseCase && aiMaturity
 
@@ -81,10 +82,30 @@ export function Step1Context() {
             </select>
           </div>
         </div>
+
+        <div className="grid gap-2">
+          <Label htmlFor="usageFrequency" className="text-xs font-bold uppercase tracking-wider text-slate-500">Tool Usage Frequency</Label>
+          <div className="grid grid-cols-3 gap-3">
+             {['Daily', 'Weekly', 'Occasional'].map((freq) => (
+                <button
+                  key={freq}
+                  onClick={() => setContext({ toolUsageFrequency: freq })}
+                  className={cn(
+                    "h-11 rounded-xl border text-xs font-bold transition-all",
+                    toolUsageFrequency === freq 
+                      ? "border-primary bg-primary/5 text-primary ring-1 ring-primary" 
+                      : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                  )}
+                >
+                  {freq}
+                </button>
+             ))}
+          </div>
+        </div>
       </div>
 
       <div className="flex justify-end pt-4 border-t">
-        <Button onClick={nextStep} disabled={!canContinue} className="h-11 px-8 font-bold shadow-md">
+        <Button onClick={nextStep} disabled={!canContinue || !toolUsageFrequency} className="h-11 px-8 font-bold shadow-md">
           Continue to Tools
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
