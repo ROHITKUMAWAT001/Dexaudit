@@ -7,9 +7,9 @@ const FOOTER_LINKS = [
   {
     title: "Product",
     links: [
-      { label: "Features", href: "/#features" },
+      { label: "Features", href: "/features" },
       { label: "How it Works", href: "/#how-it-works" },
-      { label: "Pricing", href: "/#pricing" },
+      { label: "Pricing", href: "/pricing" },
       { label: "Audit Engine", href: "/audit/new" },
     ],
   },
@@ -51,30 +51,21 @@ export function Footer() {
               in under 5 minutes.
             </p>
             <div className="flex gap-4">
-              <a
-                href="https://github.com/credex"
-                target="_blank"
-                rel="noreferrer"
-                className="text-slate-400 transition-colors hover:text-primary"
-              >
-                <Github size={20} />
-              </a>
-              <a
-                href="https://x.com/credex"
-                target="_blank"
-                rel="noreferrer"
-                className="text-slate-400 transition-colors hover:text-primary"
-              >
-                <Twitter size={20} />
-              </a>
-              <a
-                href="https://linkedin.com/company/credex"
-                target="_blank"
-                rel="noreferrer"
-                className="text-slate-400 transition-colors hover:text-primary"
-              >
-                <Linkedin size={20} />
-              </a>
+              {[
+                { icon: Github, href: "https://github.com/credex" },
+                { icon: Twitter, href: "https://x.com/credex" },
+                { icon: Linkedin, href: "https://linkedin.com/company/credex" },
+              ].map((social, i) => (
+                <a
+                  key={i}
+                  href={social.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-100 bg-white text-slate-400 transition-all duration-300 hover:border-primary/20 hover:bg-primary/5 hover:text-primary hover:shadow-sm"
+                >
+                  <social.icon size={18} />
+                </a>
+              ))}
             </div>
           </div>
 
@@ -103,6 +94,34 @@ export function Footer() {
                 </ul>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Newsletter Section */}
+        <div className="mt-16 rounded-2xl border border-slate-100 bg-slate-50/50 p-8 xl:mt-24">
+          <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
+            <div className="max-w-md text-center md:text-left">
+              <h3 className="text-lg font-black text-slate-900">Stay optimized.</h3>
+              <p className="mt-2 text-sm font-medium text-slate-500">
+                Get monthly benchmarks and AI spend optimization tips delivered to your inbox.
+              </p>
+            </div>
+            <form className="flex w-full max-w-sm items-center gap-2" onSubmit={(e) => e.preventDefault()}>
+              <input
+                id="newsletter-email"
+                name="email"
+                type="email"
+                placeholder="cto@acme.ai"
+                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm font-medium transition-all focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/5"
+                required
+              />
+              <button
+                type="submit"
+                className="h-11 rounded-xl bg-primary px-6 text-sm font-bold text-white transition-all hover:bg-primary/90 hover:shadow-lg active:scale-95"
+              >
+                Join
+              </button>
+            </form>
           </div>
         </div>
 

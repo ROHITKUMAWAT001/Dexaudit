@@ -6,6 +6,7 @@ import { ProblemSection } from "@/components/ProblemSection";
 import { FeaturesSection } from "@/components/FeaturesSection";
 import { HowItWorks } from "@/components/HowItWorks";
 import { ToolSupport } from "@/components/ToolSupport";
+import { PricingSection } from "@/components/PricingSection";
 import { FAQSection } from "@/components/FAQSection";
 import { FinalCTA } from "@/components/FinalCTA";
 import { StickyMobileCTA } from "@/components/StickyMobileCTA";
@@ -31,13 +32,13 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main className="min-h-screen selection:bg-primary/10 selection:text-primary">
-      <Navbar />
       <Hero />
       <SocialProof />
       <ProblemSection />
       <FeaturesSection />
       <HowItWorks />
       <ToolSupport />
+      <PricingSection />
       <FAQSection />
       <FinalCTA />
       <StickyMobileCTA />

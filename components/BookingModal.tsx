@@ -16,9 +16,10 @@ import { Calendar, Users, Building, Send } from "lucide-react";
 
 interface BookingModalProps {
   children?: React.ReactNode;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function BookingModal({ children }: BookingModalProps) {
+export function BookingModal({ children, onOpenChange }: BookingModalProps) {
   const [loading, setLoading] = React.useState(false);
 
   const handleBooking = async (e: React.FormEvent) => {
@@ -32,13 +33,13 @@ export function BookingModal({ children }: BookingModalProps) {
   };
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{children || <Button>Book Consultation</Button>}</DialogTrigger>
       <DialogContent className="overflow-hidden border-none p-0 shadow-2xl sm:max-w-[480px]">
         <div className="p-8">
           <DialogHeader className="mb-8">
             <div className="mb-6 flex justify-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-100 bg-emerald-50 text-emerald-600 shadow-sm">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/10 bg-primary/5 text-primary shadow-sm">
                 <Calendar size={28} strokeWidth={2.5} />
               </div>
             </div>
@@ -108,7 +109,7 @@ export function BookingModal({ children }: BookingModalProps) {
             <Button
               type="submit"
               disabled={loading}
-              className="mt-2 h-12 w-full bg-emerald-600 text-base font-bold shadow-md transition-all hover:bg-emerald-700"
+              className="mt-2 h-12 w-full bg-primary text-base font-bold shadow-md transition-all hover:bg-primary/90"
             >
               {loading ? "Submitting..." : "Request Free Consultation"}
               {!loading && <Send className="ml-2 h-4 w-4 opacity-70" />}

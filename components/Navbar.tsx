@@ -2,10 +2,12 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AuthModal } from "@/components/AuthModal";
 import { BookingModal } from "@/components/BookingModal";
 import { Menu, X, Terminal, User, LogOut, Settings, CreditCard } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,9 +17,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+const NAV_LINKS = [
+  { label: "Features", href: "/features" },
+  { label: "Pricing", href: "/pricing" },
+];
+
 export function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false); // Placeholder for demo
+  const pathname = usePathname();
+
+  // Close menu when navigating
+  React.useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   return (
     <nav className="fixed top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
@@ -33,22 +46,31 @@ export function Navbar() {
 
           {/* Desktop Links */}
           <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
-              <Link
-                href="#"
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-              >
-                Features
-              </Link>
-              <Link
-                href="#"
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-              >
-                Pricing
-              </Link>
+            <div className="ml-10 flex items-center space-x-8">
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="group relative py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+                >
+                  {link.label}
+                  {/* Hover Underline */}
+                  <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-primary transition-all duration-300 group-hover:w-full" />
+                  
+                  {/* Active Underline (Framer Motion) */}
+                  {pathname === link.href && (
+                    <motion.div
+                      layoutId="active-nav"
+                      className="absolute bottom-0 left-0 h-0.5 w-full bg-primary"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </Link>
+              ))}
               <BookingModal>
-                <button className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+                <button className="group relative py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
                   Consultation
+                  <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-primary transition-all duration-300 group-hover:w-full" />
                 </button>
               </BookingModal>
             </div>
@@ -114,62 +136,90 @@ export function Navbar() {
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:outline-none"
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              <AnimatePresence mode="wait">
+                {isOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ opacity: 0, rotate: -90 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: 90 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X size={24} />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ opacity: 0, rotate: 90 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: -90 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu size={24} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </button>
           </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      {isOpen && (
-        <div className="border-b bg-background p-4 duration-300 animate-in slide-in-from-top-2 md:hidden">
-          <div className="space-y-3">
-            <Link
-              href="#"
-              className="block rounded-md px-3 py-2 text-base font-bold hover:bg-slate-50"
-              onClick={() => setIsOpen(false)}
-            >
-              Features
-            </Link>
-            <Link
-              href="#"
-              className="block rounded-md px-3 py-2 text-base font-bold hover:bg-slate-50"
-              onClick={() => setIsOpen(false)}
-            >
-              Pricing
-            </Link>
-            <BookingModal>
-              <button className="w-full rounded-md px-3 py-2 text-left text-base font-bold hover:bg-slate-50">
-                Consultation
-              </button>
-            </BookingModal>
-
-            <div className="flex flex-col gap-2 border-t pt-4">
-              {!isLoggedIn ? (
-                <>
-                  <AuthModal>
-                    <Button variant="outline" className="h-11 w-full font-bold">
-                      Sign In
-                    </Button>
-                  </AuthModal>
-                  <Link href="/audit/new" className="w-full">
-                    <Button className="h-11 w-full font-bold">Start Audit</Button>
-                  </Link>
-                </>
-              ) : (
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start font-bold text-red-600"
-                  onClick={() => setIsLoggedIn(false)}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="relative z-[60] overflow-hidden border-b bg-background md:hidden"
+          >
+            <div className="space-y-3 p-4">
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="block rounded-md px-3 py-2 text-base font-bold hover:bg-slate-50"
                 >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Log out
-                </Button>
-              )}
+                  {link.label}
+                </Link>
+              ))}
+              <BookingModal>
+                <button className="w-full rounded-md px-3 py-2 text-left text-base font-bold hover:bg-slate-50">
+                  Consultation
+                </button>
+              </BookingModal>
+
+              <div className="flex flex-col gap-2 border-t pt-4">
+                {!isLoggedIn ? (
+                  <>
+                    <AuthModal>
+                      <Button variant="outline" className="h-11 w-full font-bold">
+                        Sign In
+                      </Button>
+                    </AuthModal>
+                    <Link href="/audit/new" className="w-full">
+                      <Button className="h-11 w-full font-bold">Start Audit</Button>
+                    </Link>
+                  </>
+                ) : (
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start font-bold text-red-600"
+                    onClick={() => {
+                      setIsLoggedIn(false);
+                      setIsOpen(false);
+                    }}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Log out
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

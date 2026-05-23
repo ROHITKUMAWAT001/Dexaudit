@@ -16,9 +16,10 @@ import { Mail, Github, Gitlab, Terminal } from "lucide-react";
 
 interface AuthModalProps {
   children?: React.ReactNode;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function AuthModal({ children }: AuthModalProps) {
+export function AuthModal({ children, onOpenChange }: AuthModalProps) {
   const [email, setEmail] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
@@ -37,7 +38,7 @@ export function AuthModal({ children }: AuthModalProps) {
   };
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         {children || <Button variant="outline">Sign In</Button>}
       </DialogTrigger>
