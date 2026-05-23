@@ -4,19 +4,32 @@ import { useState } from "react"
 import { useAuditStore } from "@/lib/store/useAuditStore"
 import { Navbar } from "@/components/Navbar"
 import { ScanningTerminal } from "@/components/audit/results/ScanningTerminal"
+import { ResultsHero } from "@/components/audit/results/ResultsHero"
+import { ToolAuditCard } from "@/components/audit/results/ToolAuditCard"
+import { SavingsCharts } from "@/components/audit/results/SavingsChart"
+import { EmailAuditGate } from "@/components/audit/results/EmailAuditGate"
+import { runSurgicalAudit } from "@/lib/audit-engine"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { CheckCircle2, ArrowRight, Share2, Download } from "lucide-react"
+import { Share2, Download, Rocket, ArrowRight } from "lucide-react"
 
 export default function ResultsPage() {
   const [isScanning, setIsScanning] = useState(true)
+  const [isLocked, setIsLocked] = useState(true)
   const { selectedTools, teamSize, toolDetails } = useAuditStore()
 
+  // Generate results once scanning is done
+  const auditResults = runSurgicalAudit(selectedTools, toolDetails, teamSize)
+  
+  const totalMonthlyCurrent = auditResults.reduce((acc, r) => acc + r.currentSpend, 0)
+  const totalMonthlyOptimized = auditResults.reduce((acc, r) => acc + r.optimizedSpend, 0)
+  const totalAnnualSavings = (totalMonthlyCurrent - totalMonthlyOptimized) * 12
+
   return (
-    <main className="min-h-screen bg-slate-50/50 pt-24 pb-12">
+    <main className="min-h-screen bg-slate-50/50 pt-24 pb-20">
       <Navbar />
       
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <AnimatePresence mode="wait">
           {isScanning ? (
             <motion.div
@@ -24,7 +37,6 @@ export default function ResultsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.5 }}
               className="py-12"
             >
               <ScanningTerminal 
@@ -35,36 +47,84 @@ export default function ResultsPage() {
           ) : (
             <motion.div
               key="results"
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="space-y-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="space-y-12"
             >
-              {/* Results Placeholder for Phase 6 */}
-              <div className="text-center py-20 space-y-6 bg-white rounded-3xl border border-slate-200 shadow-xl p-12">
-                 <div className="mx-auto h-20 w-20 rounded-full bg-emerald-50 flex items-center justify-center border border-emerald-100 text-emerald-600 shadow-sm">
-                    <CheckCircle2 size={40} strokeWidth={2.5} />
+              {isLocked && <EmailAuditGate onUnlock={() => setIsLocked(false)} />}
+              {/* Header Actions */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-8">
+                <div>
+                   <h1 className="text-3xl font-black tracking-tight text-slate-900">Audit Dashboard</h1>
+                   <p className="text-sm font-medium text-slate-500 mt-1">Surgical report for your engineering AI stack.</p>
+                </div>
+                <div className="flex gap-3">
+                   <Button variant="outline" className="h-11 rounded-xl font-bold bg-white">
+                      <Download className="mr-2 h-4 w-4" />
+                      PDF Report
+                   </Button>
+                   <Button className="h-11 rounded-xl font-bold shadow-lg shadow-primary/20">
+                      <Share2 className="mr-2 h-4 w-4" />
+                      Share Audit
+                   </Button>
+                </div>
+              </div>
+
+              {/* Hero Section */}
+              <ResultsHero 
+                totalCurrent={totalMonthlyCurrent}
+                totalOptimized={totalMonthlyOptimized}
+                savings={totalAnnualSavings}
+              />
+
+              {/* Visuals Section */}
+              <div className="space-y-6">
+                 <div className="flex items-center gap-4">
+                    <h2 className="text-lg font-black tracking-tight text-slate-900 uppercase">Spend Visualizations</h2>
+                    <div className="h-[1px] flex-1 bg-slate-200" />
                  </div>
-                 <div className="space-y-2">
-                    <h1 className="text-4xl font-black tracking-tight text-slate-900">Audit Complete</h1>
-                    <p className="text-slate-500 text-lg max-w-lg mx-auto font-medium">
-                      We've analyzed your stack and detected <strong>$12,400+</strong> in potential annual savings across your toolchain.
-                    </p>
+                 <SavingsCharts results={auditResults} />
+              </div>
+
+              {/* Detailed Breakdown */}
+              <div className="space-y-6">
+                 <div className="flex items-center gap-4">
+                    <h2 className="text-lg font-black tracking-tight text-slate-900 uppercase">Surgical Breakdown</h2>
+                    <div className="h-[1px] flex-1 bg-slate-200" />
                  </div>
-                 <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-                    <Button size="lg" className="h-14 px-8 text-lg font-black shadow-xl">
-                       View Full Dashboard
-                       <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                    <div className="flex gap-3">
-                       <Button variant="outline" size="lg" className="h-14 w-14 p-0 rounded-2xl">
-                          <Share2 size={24} />
-                       </Button>
-                       <Button variant="outline" size="lg" className="h-14 w-14 p-0 rounded-2xl">
-                          <Download size={24} />
-                       </Button>
-                    </div>
+                 <div className="grid gap-6">
+                    {auditResults.map((result) => (
+                      <ToolAuditCard key={result.toolId} result={result} />
+                    ))}
                  </div>
               </div>
+
+              {/* Lead Capture / Next Steps */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="rounded-3xl bg-primary p-12 text-center text-primary-foreground relative overflow-hidden shadow-2xl"
+              >
+                 <div className="absolute left-0 top-0 h-full w-full opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent" />
+                 <div className="relative z-10 max-w-2xl mx-auto space-y-6">
+                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm mb-4">
+                       <Rocket size={24} className="text-white" />
+                    </div>
+                    <h2 className="text-4xl font-black tracking-tighter">Ready to unlock these savings?</h2>
+                    <p className="text-lg opacity-80 font-medium">
+                       Our engineering experts can help you implement these optimizations in under 48 hours. No disruption, just pure efficiency.
+                    </p>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                       <Button size="lg" className="h-14 px-10 text-lg font-black bg-white text-primary hover:bg-slate-50 shadow-xl w-full sm:w-auto">
+                          Book Migration Strategy
+                          <ArrowRight className="ml-2 h-5 w-5" />
+                       </Button>
+                       <p className="text-sm font-bold opacity-60">15-min discovery call</p>
+                    </div>
+                 </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
