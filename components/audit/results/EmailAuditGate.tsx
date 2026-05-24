@@ -5,20 +5,53 @@ import { motion } from "framer-motion";
 import { Mail, Lock, ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { captureLead } from "@/lib/actions/leads";
+import { useAuditStore } from "@/lib/store/useAuditStore";
+import { runSurgicalAudit } from "@/lib/audit-engine";
+import { toast } from "sonner";
 
 export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { teamSize, selectedTools, toolDetails } = useAuditStore();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    const honeypot = formData.get("website") as string;
+    if (honeypot) {
+      onUnlock(); // Quietly unlock but don't save to DB
+      return;
+    }
+
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      onUnlock();
-    }, 1500);
+
+    const auditResults = runSurgicalAudit(selectedTools, toolDetails, teamSize);
+    const totalMonthlyCurrent = auditResults.reduce((acc, r) => acc + r.currentSpend, 0);
+    const totalMonthlyOptimized = auditResults.reduce((acc, r) => acc + r.optimizedSpend, 0);
+    const totalAnnualSavings = (totalMonthlyCurrent - totalMonthlyOptimized) * 12;
+
+    const result = await captureLead({
+      email,
+      company_name: company,
+      role,
+      team_size: teamSize,
+      audit_data: { selectedTools, toolDetails },
+      savings: totalAnnualSavings,
+    });
+
+    if (result.success) {
+      toast.success("Identity verified. Unlocking your report.");
+      setTimeout(() => {
+        onUnlock();
+      }, 800);
+    } else {
+      toast.error("Verification failed. Please try again.");
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -42,6 +75,7 @@ export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 text-left">
+          <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
           <div className="space-y-1.5">
             <label className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
               Work Email

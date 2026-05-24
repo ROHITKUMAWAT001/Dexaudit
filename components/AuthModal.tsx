@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, Github, Gitlab, Terminal } from "lucide-react";
+import { toast } from "sonner";
 
 interface AuthModalProps {
   children?: React.ReactNode;
@@ -29,12 +30,13 @@ export function AuthModal({ children, onOpenChange }: AuthModalProps) {
     // Supabase logic will go here
     setTimeout(() => {
       setLoading(false);
-      alert("Magic link sent to " + email);
+      toast.success("Magic link sent! Check your inbox.");
+      if (onOpenChange) onOpenChange(false);
     }, 1000);
   };
 
   const handleProvider = (provider: string) => {
-    alert(`Connecting to ${provider}... (Supabase integration pending)`);
+    toast.info(`Connecting to ${provider}...`);
   };
 
   return (

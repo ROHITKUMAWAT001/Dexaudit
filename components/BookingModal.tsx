@@ -13,6 +13,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Calendar, Users, Building, Send } from "lucide-react";
+import { captureLead } from "@/lib/actions/leads";
+import { toast } from "sonner";
 
 interface BookingModalProps {
   children?: React.ReactNode;
@@ -25,11 +27,36 @@ export function BookingModal({ children, onOpenChange }: BookingModalProps) {
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Lead capture logic
+
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    const honeypot = formData.get("website") as string;
+    
+    if (honeypot) {
+      // Quietly reject bots
+      setTimeout(() => {
+        setLoading(false);
+        if (onOpenChange) onOpenChange(false);
+      }, 1000);
+      return;
+    }
+
+    const data = {
+      email: formData.get("email") as string,
+      company_name: formData.get("company_name") as string,
+      team_size: parseInt(formData.get("team_size") as string) || 0,
+    };
+
+    const result = await captureLead(data);
+
     setTimeout(() => {
       setLoading(false);
-      alert("Consultation request received! We'll reach out within 24 hours.");
-    }, 1200);
+      if (result.success) {
+        toast.success("Consultation request received! We'll reach out within 24 hours.");
+        if (onOpenChange) onOpenChange(false);
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+    }, 800);
   };
 
   return (
@@ -53,6 +80,9 @@ export function BookingModal({ children, onOpenChange }: BookingModalProps) {
           </DialogHeader>
 
           <form onSubmit={handleBooking} className="grid gap-5">
+            {/* Honeypot field for anti-spam */}
+            <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
+
             <div className="grid gap-2">
               <Label
                 htmlFor="company"
@@ -64,6 +94,7 @@ export function BookingModal({ children, onOpenChange }: BookingModalProps) {
                 <Building className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <Input
                   id="company"
+                  name="company_name"
                   placeholder="Acme AI"
                   className="h-12 bg-slate-50/30 pl-10"
                   required
@@ -82,6 +113,7 @@ export function BookingModal({ children, onOpenChange }: BookingModalProps) {
                 <Users className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <Input
                   id="team-size"
+                  name="team_size"
                   type="number"
                   placeholder="10"
                   className="h-12 bg-slate-50/30 pl-10"
@@ -99,6 +131,7 @@ export function BookingModal({ children, onOpenChange }: BookingModalProps) {
               </Label>
               <Input
                 id="work-email"
+                name="email"
                 type="email"
                 placeholder="cto@company.com"
                 className="h-12 bg-slate-50/30"
