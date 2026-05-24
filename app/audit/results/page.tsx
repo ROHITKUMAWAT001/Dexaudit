@@ -10,6 +10,7 @@ import { SavingsCharts } from "@/components/audit/results/SavingsChart";
 import { EmailAuditGate } from "@/components/audit/results/EmailAuditGate";
 import { runSurgicalAudit } from "@/lib/audit-engine";
 import { encodeAuditData } from "@/lib/share";
+import { generateAuditSummary } from "@/lib/actions/ai";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -20,15 +21,20 @@ export default function ResultsPage() {
   const [isLocked, setIsLocked] = useState(true);
   const [copied, setCopied] = useState(false);
   const [aiLoading, setAiLoading] = useState(true);
+  const [aiSummary, setAiSummary] = useState("");
   const { selectedTools, teamSize, toolDetails } = useAuditStore();
 
-  // Simulate AI Summary loading
+  // Real AI Summary generation
   useEffect(() => {
-    if (!isScanning && !isLocked) {
-      const timer = setTimeout(() => setAiLoading(false), 2000);
-      return () => clearTimeout(timer);
+    async function fetchSummary() {
+      if (!isScanning && !isLocked && aiSummary === "") {
+        const result = await generateAuditSummary(auditResults, teamSize);
+        setAiSummary(result.summary);
+        setAiLoading(false);
+      }
     }
-  }, [isScanning, isLocked]);
+    fetchSummary();
+  }, [isScanning, isLocked, auditResults, teamSize, aiSummary]);
 
   // Generate results once scanning is done
   const auditResults = runSurgicalAudit(selectedTools, toolDetails, teamSize);
@@ -133,11 +139,11 @@ export default function ResultsPage() {
                 ) : (
                   <div className="relative">
                     <p className="text-lg font-medium leading-relaxed text-slate-600">
-                      Based on your current stack of {selectedTools.length} tools, we&apos;ve identified a significant plan mismatch in your {selectedTools[0]} setup. By migrating to a centralized Team plan, you can consolidate seat management and unlock roughly ${Math.round(totalAnnualSavings / 12)} in monthly liquidity without impacting developer velocity.
+                      {aiSummary}
                     </p>
                     <div className="mt-6 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary">
                       <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
-                      Analysis complete via Anthropic Claude 3.5 Sonnet
+                      Analysis complete via Google Gemini 1.5 Flash
                     </div>
                   </div>
                 )}
