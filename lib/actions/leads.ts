@@ -34,7 +34,7 @@ export async function captureLead(data: LeadData) {
         email: data.email,
         company_name: data.company_name,
         role: data.role,
-        team_size: data.team_size,
+        team_size: (data.team_size !== undefined && data.team_size !== null && data.team_size !== "") ? parseInt(String(data.team_size)) : null,
         audit_data: data.audit_data,
       },
     ]);

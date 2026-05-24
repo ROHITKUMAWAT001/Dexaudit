@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { Check, ShieldCheck, Zap, Building2 } from "lucide-react";
+import { Check, ShieldCheck, Zap, Building2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { createCheckoutSession } from "@/lib/actions/stripe";
+import { toast } from "sonner";
 
 const plans = [
   {
@@ -53,6 +55,30 @@ const plans = [
 ];
 
 export function PricingSection() {
+  const [loadingPlan, setLoadingPlan] = React.useState<string | null>(null);
+
+  const handleSubscription = async (planName: string) => {
+    if (planName === "Free Audit") {
+      toast.info("Free audits can be started directly from the home page.");
+      return;
+    }
+    
+    if (planName === "Enterprise") {
+      toast.success("Sales team notified! We'll reach out to your work email.");
+      return;
+    }
+
+    setLoadingPlan(planName);
+    const result = await createCheckoutSession(planName);
+
+    if (result.url) {
+      window.location.href = result.url;
+    } else {
+      toast.error(result.error || "Failed to start checkout session.");
+      setLoadingPlan(null);
+    }
+  };
+
   return (
     <section className="py-24 bg-white" id="pricing">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -136,11 +162,17 @@ export function PricingSection() {
               <Button
                 size="lg"
                 variant={plan.popular ? "default" : "outline"}
+                disabled={loadingPlan !== null}
+                onClick={() => handleSubscription(plan.name)}
                 className={`mt-8 w-full font-bold ${
                   plan.popular ? "bg-primary hover:bg-primary/90" : "hover:bg-primary/5 hover:text-primary"
                 }`}
               >
-                {plan.cta}
+                {loadingPlan === plan.name ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  plan.cta
+                )}
               </Button>
             </motion.div>
           ))}

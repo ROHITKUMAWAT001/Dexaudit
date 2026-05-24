@@ -31,11 +31,19 @@ export async function sendAuditConfirmationEmail(email: string, totalSavings: nu
       </div>
     `;
 
-    console.log("Attempting to send email to:", email, "with savings:", totalSavings);
+    const sanitizedEmail = email.trim().toLowerCase();
+    
+    // Basic validation before calling API
+    if (!sanitizedEmail || !sanitizedEmail.includes('@')) {
+      console.error("❌ Resend Error: Invalid email skipped", sanitizedEmail);
+      return { success: false, error: "Invalid email format" };
+    }
+
+    console.log("Attempting to send email to:", sanitizedEmail, "with savings:", totalSavings);
 
     const { data, error } = await resend.emails.send({
       from: "DexAudit <onboarding@resend.dev>",
-      to: [email],
+      to: [sanitizedEmail],
       subject: subject,
       html: content,
     });

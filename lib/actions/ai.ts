@@ -11,7 +11,8 @@ export async function generateAuditSummary(results: AuditResult[], teamSize: str
       throw new Error("GEMINI_API_KEY is not configured");
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const modelName = "gemini-flash-latest";
+    const model = genAI.getGenerativeModel({ model: modelName });
 
     const systemPrompt = `
       You are an elite Cloud & AI Infrastructure Financial Analyst. Your job is to review a company's AI tool stack audit and provide a concise, hard-hitting, 100-word executive summary. 

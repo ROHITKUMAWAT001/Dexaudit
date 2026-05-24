@@ -4,7 +4,7 @@ This document outlines the LLM prompts used within DexAudit and the reasoning be
 
 ## 1. Personalized Audit Summary Prompt
 
-**Model Used:** Google Gemini 1.5 Flash (via Google Generative AI SDK)
+**Model Used:** Google Gemini Flash Latest (via Google Generative AI SDK)
 
 **System Prompt / Context:**
 ```text

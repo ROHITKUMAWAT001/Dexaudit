@@ -77,12 +77,13 @@ export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
         <form onSubmit={handleSubmit} className="space-y-4 text-left">
           <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
           <div className="space-y-1.5">
-            <label className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
+            <label htmlFor="gate-email" className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
               Work Email
             </label>
             <div className="relative">
               <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <Input
+                id="gate-email"
                 type="email"
                 required
                 placeholder="john@company.com"
@@ -95,10 +96,11 @@ export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
+              <label htmlFor="gate-company" className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
                 Company (Optional)
               </label>
               <Input
+                id="gate-company"
                 placeholder="Acme AI"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
@@ -106,10 +108,11 @@ export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
               />
             </div>
             <div className="space-y-1.5">
-              <label className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
+              <label htmlFor="gate-role" className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
                 Role (Optional)
               </label>
               <Input
+                id="gate-role"
                 placeholder="CTO / Eng Lead"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}

@@ -8,21 +8,42 @@ import { ResultsHero } from "@/components/audit/results/ResultsHero";
 import { ToolAuditCard } from "@/components/audit/results/ToolAuditCard";
 import { SavingsCharts } from "@/components/audit/results/SavingsChart";
 import { EmailAuditGate } from "@/components/audit/results/EmailAuditGate";
-import { runSurgicalAudit } from "@/lib/audit-engine";
+import { HighSavingsModal } from "@/components/audit/results/HighSavingsModal";
+import { ReportCover } from "@/components/audit/report/ReportCover";
+import { ReportSummary } from "@/components/audit/report/ReportSummary";
+import { ReportCharts } from "@/components/audit/report/ReportCharts";
+import { ReportBreakdownPage } from "@/components/audit/report/ReportBreakdownPage";
+import { ReportMethodology } from "@/components/audit/report/ReportMethodology";
+import { runSurgicalAudit, AuditResult } from "@/lib/audit-engine";
 import { encodeAuditData } from "@/lib/share";
 import { generateAuditSummary } from "@/lib/actions/ai";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Share2, Download, Rocket, ArrowRight, Check, Twitter, Linkedin, Sparkles } from "lucide-react";
+import { Share2, Download, Rocket, ArrowRight, Check, Twitter, Linkedin, Sparkles, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import * as React from "react";
 
 export default function ResultsPage() {
   const [isScanning, setIsScanning] = useState(true);
   const [isLocked, setIsLocked] = useState(true);
   const [copied, setCopied] = useState(false);
   const [aiLoading, setAiLoading] = useState(true);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [aiSummary, setAiSummary] = useState("");
+  const [showHighSavingsModal, setShowHighSavingsModal] = useState(false);
+  const [hasShownModal, setHasShownModal] = useState(false);
+  const dashboardRef = React.useRef<HTMLDivElement>(null);
   const { selectedTools, teamSize, toolDetails } = useAuditStore();
+
+  // Generate results once scanning is done
+  const auditResults = runSurgicalAudit(selectedTools, toolDetails, teamSize);
+
+  const totalMonthlyCurrent = auditResults.reduce((acc, r) => acc + r.currentSpend, 0);
+  const totalMonthlyOptimized = auditResults.reduce((acc, r) => acc + r.optimizedSpend, 0);
+  const totalAnnualSavings = (totalMonthlyCurrent - totalMonthlyOptimized) * 12;
 
   // Real AI Summary generation
   useEffect(() => {
@@ -31,17 +52,16 @@ export default function ResultsPage() {
         const result = await generateAuditSummary(auditResults, teamSize);
         setAiSummary(result.summary);
         setAiLoading(false);
+
+        // Auto-show high savings modal if conditions met
+        if (totalAnnualSavings > 500 && !hasShownModal) {
+          setShowHighSavingsModal(true);
+          setHasShownModal(true);
+        }
       }
     }
     fetchSummary();
-  }, [isScanning, isLocked, auditResults, teamSize, aiSummary]);
-
-  // Generate results once scanning is done
-  const auditResults = runSurgicalAudit(selectedTools, toolDetails, teamSize);
-
-  const totalMonthlyCurrent = auditResults.reduce((acc, r) => acc + r.currentSpend, 0);
-  const totalMonthlyOptimized = auditResults.reduce((acc, r) => acc + r.optimizedSpend, 0);
-  const totalAnnualSavings = (totalMonthlyCurrent - totalMonthlyOptimized) * 12;
+  }, [isScanning, isLocked, auditResults, teamSize, aiSummary, totalAnnualSavings, hasShownModal]);
 
   const handleShare = () => {
     const shareId = encodeAuditData({
@@ -55,9 +75,95 @@ export default function ResultsPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleDownloadPDF = async () => {
+    setIsDownloading(true);
+    toast.info("Assembling professional boardroom report...");
+    
+    try {
+      const pdf = new jsPDF("p", "pt", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+
+      // IDs of components to capture
+      const componentIds = ["report-cover", "report-summary", "report-charts"];
+      
+      // Calculate breakdown pages (3 tools per page)
+      const toolsPerPage = 3;
+      const breakdownPageCount = Math.ceil(auditResults.length / toolsPerPage);
+      
+      for (let i = 0; i < breakdownPageCount; i++) {
+        componentIds.push(`report-breakdown-${i}`);
+      }
+      
+      componentIds.push("report-methodology");
+
+      for (let i = 0; i < componentIds.length; i++) {
+        const id = componentIds[i];
+        const element = document.getElementById(id);
+        
+        if (!element) continue;
+
+        const canvas = await html2canvas(element, {
+          scale: 3, // Ultra-crisp quality
+          useCORS: true,
+          logging: false,
+          backgroundColor: "#ffffff",
+          width: 794,
+          height: 1123,
+        });
+
+        const imgData = canvas.toDataURL("image/png", 1.0);
+        
+        if (i > 0) pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
+      }
+
+      pdf.save(`DexAudit-Boardroom-Report-${new Date().getTime()}.pdf`);
+      toast.success("Professional report generated successfully!");
+    } catch (error) {
+      console.error("Boardroom PDF Error:", error);
+      toast.error("Failed to assemble report. Rendering issue.");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  // Helper to chunk results for multi-page breakdown
+  const resultChunks = Array.from(
+    { length: Math.ceil(auditResults.length / 3) }, 
+    (v, i) => auditResults.slice(i * 3, i * 3 + 3)
+  );
+
   return (
     <main className="min-h-screen bg-slate-50/50 pb-20 pt-24">
       <Navbar />
+
+      {/* HIDDEN REPORT ENGINE - OFF SCREEN */}
+      <div className="fixed -left-[9999px] top-0 pointer-events-none opacity-0 select-none">
+        <div id="report-cover">
+          <ReportCover auditId="DX-4402-991" timestamp={new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} />
+        </div>
+        <div id="report-summary">
+          <ReportSummary 
+            summary={aiSummary} 
+            totalCurrent={totalMonthlyCurrent} 
+            totalOptimized={totalMonthlyOptimized} 
+            totalSavings={totalAnnualSavings}
+            teamSize={teamSize}
+          />
+        </div>
+        <div id="report-charts">
+          <ReportCharts results={auditResults} />
+        </div>
+        {resultChunks.map((chunk, index) => (
+          <div key={index} id={`report-breakdown-${index}`}>
+            <ReportBreakdownPage results={chunk} pageNumber={index + 4} />
+          </div>
+        ))}
+        <div id="report-methodology">
+          <ReportMethodology />
+        </div>
+      </div>
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <AnimatePresence mode="wait">
@@ -80,6 +186,13 @@ export default function ResultsPage() {
               className="space-y-12"
             >
               {isLocked && <EmailAuditGate onUnlock={() => setIsLocked(false)} />}
+              
+              <HighSavingsModal 
+                isOpen={showHighSavingsModal} 
+                onOpenChange={setShowHighSavingsModal} 
+                savings={totalAnnualSavings}
+              />
+              
               {/* Header Actions */}
               <div className="flex flex-col justify-between gap-4 border-b border-slate-200 pb-8 sm:flex-row sm:items-center">
                 <div>
@@ -91,6 +204,19 @@ export default function ResultsPage() {
                   </p>
                 </div>
                 <div className="flex gap-3">
+                  <Button 
+                    variant="outline" 
+                    className="h-11 rounded-xl bg-white font-bold hover:bg-slate-50"
+                    onClick={handleDownloadPDF}
+                    disabled={isDownloading}
+                  >
+                    {isDownloading ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Download className="mr-2 h-4 w-4" />
+                    )}
+                    PDF Report
+                  </Button>
                   <Button variant="outline" className="h-11 rounded-xl bg-white font-bold hover:bg-slate-50">
                     <Twitter className="mr-2 h-4 w-4 text-[#1DA1F2]" />
                     Share on X
@@ -118,67 +244,70 @@ export default function ResultsPage() {
                 </div>
               </div>
 
-              {/* AI Summary Section */}
-              <div className="rounded-3xl border border-primary/10 bg-white p-8 shadow-sm">
-                <div className="mb-6 flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <Sparkles size={18} />
-                  </div>
-                  <h2 className="text-lg font-black tracking-tight text-slate-900">
-                    AI-Generated Intelligence Summary
-                  </h2>
-                </div>
-                
-                {aiLoading ? (
-                  <div className="space-y-3">
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-4 w-[92%]" />
-                    <Skeleton className="h-4 w-[95%]" />
-                    <Skeleton className="h-4 w-[40%] mt-4" />
-                  </div>
-                ) : (
-                  <div className="relative">
-                    <p className="text-lg font-medium leading-relaxed text-slate-600">
-                      {aiSummary}
-                    </p>
-                    <div className="mt-6 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary">
-                      <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
-                      Analysis complete via Google Gemini 1.5 Flash
+              {/* PDF EXPORT AREA: FROM AI SUMMARY TO LAST BREAKDOWN */}
+              <div className="space-y-12 bg-white/40 p-1 rounded-[3rem] -m-1">
+                {/* AI Summary Section */}
+                <div className="rounded-3xl border border-primary/10 bg-white p-8 shadow-sm">
+                  <div className="mb-6 flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <Sparkles size={18} />
                     </div>
+                    <h2 className="text-lg font-black tracking-tight text-slate-900">
+                      AI-Generated Intelligence Summary
+                    </h2>
                   </div>
-                )}
-              </div>
-
-              {/* Hero Section */}
-              <ResultsHero
-                totalCurrent={totalMonthlyCurrent}
-                totalOptimized={totalMonthlyOptimized}
-                savings={totalAnnualSavings}
-              />
-
-              {/* Visuals Section */}
-              <div className="space-y-6">
-                <div className="flex items-center gap-4">
-                  <h2 className="text-lg font-black uppercase tracking-tight text-slate-900">
-                    Spend Visualizations
-                  </h2>
-                  <div className="h-[1px] flex-1 bg-slate-200" />
+                  
+                  {aiLoading ? (
+                    <div className="space-y-3">
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-4 w-[92%]" />
+                      <Skeleton className="h-4 w-[95%]" />
+                      <Skeleton className="h-4 w-[40%] mt-4" />
+                    </div>
+                  ) : (
+                    <div className="relative">
+                      <p className="text-lg font-medium leading-relaxed text-slate-600">
+                        {aiSummary}
+                      </p>
+                      <div className="mt-6 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary">
+                        <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
+                        Analysis complete via Google Gemini Flash Latest
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <SavingsCharts results={auditResults} />
-              </div>
 
-              {/* Detailed Breakdown */}
-              <div className="space-y-6">
-                <div className="flex items-center gap-4">
-                  <h2 className="text-lg font-black uppercase tracking-tight text-slate-900">
-                    Surgical Breakdown
-                  </h2>
-                  <div className="h-[1px] flex-1 bg-slate-200" />
+                {/* Hero Section */}
+                <ResultsHero
+                  totalCurrent={totalMonthlyCurrent}
+                  totalOptimized={totalMonthlyOptimized}
+                  savings={totalAnnualSavings}
+                />
+
+                {/* Visuals Section */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <h2 className="text-lg font-black uppercase tracking-tight text-slate-900">
+                      Spend Visualizations
+                    </h2>
+                    <div className="h-[1px] flex-1 bg-slate-200" />
+                  </div>
+                  <SavingsCharts results={auditResults} />
                 </div>
-                <div className="grid gap-6">
-                  {auditResults.map((result) => (
-                    <ToolAuditCard key={result.toolId} result={result} />
-                  ))}
+
+                {/* Detailed Breakdown */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <h2 className="text-lg font-black uppercase tracking-tight text-slate-900">
+                      Surgical Breakdown
+                    </h2>
+                    <div className="h-[1px] flex-1 bg-slate-200" />
+                  </div>
+                  <div className="grid gap-6 pb-4">
+                    {auditResults.map((result) => (
+                      <ToolAuditCard key={result.toolId} result={result} />
+                    ))}
+                  </div>
                 </div>
               </div>
 
