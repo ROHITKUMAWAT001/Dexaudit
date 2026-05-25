@@ -225,7 +225,7 @@ export function Navbar() {
                   </div>
                 ) : !user ? (
                   <>
-                    <AuthModal onOpenChange={(open) => { if (open) setIsOpen(false); }}>
+                    <AuthModal>
                       <Button variant="outline" className="h-11 w-full font-bold">
                         Sign In
                       </Button>

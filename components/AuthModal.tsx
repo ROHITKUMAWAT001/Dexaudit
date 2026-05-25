@@ -61,7 +61,6 @@ export function AuthModal({ children, onOpenChange }: AuthModalProps) {
         {children || <Button variant="outline">Sign In</Button>}
       </DialogTrigger>
       <DialogContent
-        onOpenAutoFocus={(e) => e.preventDefault()}
         className="overflow-hidden border-none p-0 shadow-2xl sm:max-w-[400px] rounded-[2rem]"
       >
         <div className="p-8">
