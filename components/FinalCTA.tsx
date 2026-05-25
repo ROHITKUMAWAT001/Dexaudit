@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export function FinalCTA() {
   return (
@@ -25,16 +26,21 @@ export function FinalCTA() {
           Start your deep-scan audit today for free.
         </p>
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button size="lg" variant="secondary" className="h-12 px-8 text-base font-bold shadow-xl">
-            Start Free Audit
-            <ArrowRight size={18} className="ml-2" />
+          <Button asChild size="lg" variant="secondary" className="h-12 px-8 text-base font-bold shadow-xl">
+            <Link href="/audit/new">
+              Start Free Audit
+              <ArrowRight size={18} className="ml-2" />
+            </Link>
           </Button>
           <Button
+            asChild
             size="lg"
             variant="outline"
             className="h-12 border-primary-foreground/20 bg-transparent px-8 text-base font-bold hover:bg-white/10"
           >
-            Talk to Sales
+            <Link href="/audit/new">
+              Talk to Sales
+            </Link>
           </Button>
         </div>
       </div>

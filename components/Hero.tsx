@@ -1,11 +1,16 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ChevronRight, ShieldCheck, Zap, MousePointer2, MessageSquare, Brain } from "lucide-react";
+import { ChevronRight, ShieldCheck } from "lucide-react";
+import { useAuditStore } from "@/lib/store/useAuditStore";
 
 export function Hero() {
+  const { selectedTools } = useAuditStore();
+  const hasAudit = selectedTools.length > 0;
+
   return (
     <div className="relative overflow-hidden pt-[64px]">
       {/* Custom Blurred Background Image */}
@@ -58,16 +63,21 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="mb-20 flex flex-col items-center gap-4 sm:flex-row"
           >
-            <Button size="lg" className="h-12 w-full px-8 text-base sm:w-auto">
-              Start Free Audit
-              <ChevronRight size={18} className="ml-2" />
+            <Button asChild size="lg" className="h-12 w-full px-8 text-base font-bold sm:w-auto shadow-xl shadow-primary/20">
+              <Link href="/audit/new">
+                Start Free Audit
+                <ChevronRight size={18} className="ml-2" />
+              </Link>
             </Button>
             <Button
+              asChild
               size="lg"
               variant="outline"
-              className="h-12 w-full bg-white px-8 text-base sm:w-auto"
+              className="h-12 w-full bg-white px-8 text-base font-bold sm:w-auto border-slate-200"
             >
-              View Sample Report
+              <Link href={hasAudit ? "/audit/results" : "/audit/new"}>
+                {hasAudit ? "View My Report" : "View Sample Report"}
+              </Link>
             </Button>
           </motion.div>
 
