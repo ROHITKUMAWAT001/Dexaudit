@@ -6,8 +6,11 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AuthModal } from "@/components/AuthModal";
 import { BookingModal } from "@/components/BookingModal";
-import { Menu, X, Terminal, User, LogOut, Settings, CreditCard } from "lucide-react";
+import { Menu, X, Terminal, User, LogOut, Settings, CreditCard, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { getUser, logout } from "@/lib/actions/auth";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,8 +27,29 @@ const NAV_LINKS = [
 
 export function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false); // Placeholder for demo
+  const [user, setUser] = React.useState<any>(null);
+  const [isInitialLoading, setIsInitialLoading] = React.useState(true);
   const pathname = usePathname();
+  const router = useRouter();
+
+  // Fetch user session on mount and route changes
+  React.useEffect(() => {
+    async function checkUser() {
+      const currentUser = await getUser();
+      setUser(currentUser);
+      setIsInitialLoading(false);
+    }
+    checkUser();
+  }, [pathname]);
+
+  const handleLogout = async () => {
+    const result = await logout();
+    if (result.success) {
+      setUser(null);
+      toast.success("Logged out successfully");
+      router.push("/");
+    }
+  };
 
   // Close menu when navigating
   React.useEffect(() => {
@@ -78,7 +102,9 @@ export function Navbar() {
 
           {/* Actions */}
           <div className="hidden items-center gap-4 md:flex">
-            {!isLoggedIn ? (
+            {isInitialLoading ? (
+              <Loader2 className="h-5 w-5 animate-spin text-slate-300" />
+            ) : !user ? (
               <>
                 <AuthModal>
                   <Button variant="ghost" size="sm" className="font-bold">
@@ -96,16 +122,18 @@ export function Navbar() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="relative h-10 w-10 overflow-hidden rounded-full border bg-slate-100 p-0"
+                    className="relative h-10 w-10 overflow-hidden rounded-full border bg-slate-100 p-0 hover:bg-slate-200 transition-colors"
                   >
-                    <User size={20} className="text-slate-600" />
+                    <div className="flex h-full w-full items-center justify-center bg-primary/10 text-primary font-bold text-xs uppercase">
+                      {user.email?.charAt(0)}
+                    </div>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-bold leading-none">Engineering Lead</p>
-                      <p className="text-xs leading-none text-muted-foreground">cto@acme.ai</p>
+                      <p className="text-sm font-bold leading-none">Verified Auditor</p>
+                      <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
@@ -120,7 +148,7 @@ export function Navbar() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="cursor-pointer font-bold text-red-600 focus:text-red-600"
-                    onClick={() => setIsLoggedIn(false)}
+                    onClick={handleLogout}
                   >
                     <LogOut className="mr-2 h-4 w-4" />
                     Log out
@@ -191,29 +219,40 @@ export function Navbar() {
               </BookingModal>
 
               <div className="flex flex-col gap-2 border-t pt-4">
-                {!isLoggedIn ? (
+                {isInitialLoading ? (
+                  <div className="flex justify-center p-2">
+                    <Loader2 className="h-5 w-5 animate-spin text-slate-300" />
+                  </div>
+                ) : !user ? (
                   <>
-                    <AuthModal>
+                    <AuthModal onOpenChange={(open) => { if (open) setIsOpen(false); }}>
                       <Button variant="outline" className="h-11 w-full font-bold">
                         Sign In
                       </Button>
                     </AuthModal>
-                    <Link href="/audit/new" className="w-full">
+                    <Link href="/audit/new" className="w-full" onClick={() => setIsOpen(false)}>
                       <Button className="h-11 w-full font-bold">Start Audit</Button>
                     </Link>
                   </>
                 ) : (
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start font-bold text-red-600"
-                    onClick={() => {
-                      setIsLoggedIn(false);
-                      setIsOpen(false);
-                    }}
-                  >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Log out
-                  </Button>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-50 border border-slate-100 mb-2">
+                      <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs uppercase">
+                        {user.email?.charAt(0)}
+                      </div>
+                      <div className="overflow-hidden">
+                        <p className="text-xs font-bold text-slate-900 truncate">{user.email}</p>
+                      </div>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start font-bold text-red-600 hover:bg-red-50"
+                      onClick={handleLogout}
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Log out
+                    </Button>
+                  </div>
                 )}
               </div>
             </div>

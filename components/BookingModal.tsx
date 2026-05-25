@@ -23,6 +23,12 @@ interface BookingModalProps {
 
 export function BookingModal({ children, onOpenChange }: BookingModalProps) {
   const [loading, setLoading] = React.useState(false);
+  const [internalOpen, setInternalOpen] = React.useState(false);
+
+  const handleOpenChange = (open: boolean) => {
+    setInternalOpen(open);
+    if (onOpenChange) onOpenChange(open);
+  };
 
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +41,7 @@ export function BookingModal({ children, onOpenChange }: BookingModalProps) {
       // Quietly reject bots
       setTimeout(() => {
         setLoading(false);
-        if (onOpenChange) onOpenChange(false);
+        handleOpenChange(false);
       }, 1000);
       return;
     }
@@ -52,7 +58,7 @@ export function BookingModal({ children, onOpenChange }: BookingModalProps) {
       setLoading(false);
       if (result.success) {
         toast.success("Consultation request received! We'll reach out within 24 hours.");
-        if (onOpenChange) onOpenChange(false);
+        handleOpenChange(false);
       } else {
         toast.error("Something went wrong. Please try again.");
       }
@@ -60,7 +66,7 @@ export function BookingModal({ children, onOpenChange }: BookingModalProps) {
   };
 
   return (
-    <Dialog onOpenChange={onOpenChange}>
+    <Dialog open={internalOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children || <Button>Book Consultation</Button>}</DialogTrigger>
       <DialogContent className="overflow-hidden border-none p-0 shadow-2xl sm:max-w-[480px]">
         <div className="p-8">
