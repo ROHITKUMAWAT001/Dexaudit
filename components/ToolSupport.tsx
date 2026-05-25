@@ -1,12 +1,12 @@
 import * as React from "react";
 
 const tools = [
-  { name: "Cursor", color: "bg-blue-500" },
-  { name: "Claude", color: "bg-orange-500" },
-  { name: "ChatGPT", color: "bg-emerald-500" },
-  { name: "Gemini", color: "bg-indigo-500" },
-  { name: "Copilot", color: "bg-slate-900" },
-  { name: "v0.dev", color: "bg-black" },
+  { name: "Cursor", logo: "/tools/cursor.svg" },
+  { name: "Claude", logo: "/tools/claude.svg" },
+  { name: "ChatGPT", logo: "/tools/chatgpt.svg" },
+  { name: "Gemini", logo: "/tools/gemini.svg" },
+  { name: "Copilot", logo: "/tools/copilot.svg" },
+  { name: "v0.dev", logo: "/tools/v0.svg" },
 ];
 
 export function ToolSupport() {
@@ -29,7 +29,10 @@ export function ToolSupport() {
               key={tool.name}
               className="flex cursor-default items-center gap-3 rounded-xl border bg-white px-6 py-4 shadow-sm grayscale transition-all duration-300 hover:grayscale-0"
             >
-              <div className={`h-3 w-3 rounded-full ${tool.color}`} />
+              <div className="flex h-6 w-6 items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={tool.logo} alt={tool.name} className="h-5 w-5 object-contain" />
+              </div>
               <span className="font-bold text-slate-700">{tool.name}</span>
             </div>
           ))}
@@ -55,12 +58,18 @@ export function ToolSupport() {
               </thead>
               <tbody className="divide-y text-sm">
                 {[
-                  { name: "Cursor", pro: "$20", team: "$40", savings: "25%" },
-                  { name: "Claude", pro: "$20", team: "$30", savings: "30%" },
-                  { name: "ChatGPT", pro: "$20", team: "$25", savings: "15%" },
+                  { name: "Cursor", logo: "/tools/cursor.svg", pro: "$20", team: "$40", savings: "25%" },
+                  { name: "Claude", logo: "/tools/claude.svg", pro: "$20", team: "$30", savings: "30%" },
+                  { name: "ChatGPT", logo: "/tools/chatgpt.svg", pro: "$20", team: "$25", savings: "15%" },
                 ].map((row) => (
                   <tr key={row.name} className="transition-colors hover:bg-slate-50">
-                    <td className="px-6 py-4 font-bold text-slate-900">{row.name}</td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={row.logo} alt={row.name} className="h-4 w-4 grayscale opacity-70" />
+                        <span className="font-bold text-slate-900">{row.name}</span>
+                      </div>
+                    </td>
                     <td className="px-6 py-4 font-medium text-slate-600">{row.pro}/mo</td>
                     <td className="px-6 py-4 font-medium text-slate-600">{row.team}/mo</td>
                     <td className="px-6 py-4">

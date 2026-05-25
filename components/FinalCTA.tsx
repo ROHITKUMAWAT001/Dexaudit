@@ -26,7 +26,12 @@ export function FinalCTA() {
           Start your deep-scan audit today for free.
         </p>
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button asChild size="lg" variant="secondary" className="h-12 px-8 text-base font-bold shadow-xl">
+          <Button
+            asChild
+            size="lg"
+            variant="secondary"
+            className="h-12 px-8 text-base font-bold shadow-xl"
+          >
             <Link href="/audit/new">
               Start Free Audit
               <ArrowRight size={18} className="ml-2" />
@@ -36,11 +41,9 @@ export function FinalCTA() {
             asChild
             size="lg"
             variant="outline"
-            className="h-12 border-primary-foreground/20 bg-transparent px-8 text-base font-bold hover:bg-white/10"
+            className="h-12 border-primary-foreground/20 bg-transparent px-8 text-base font-bold text-white hover:bg-white/10 hover:text-white"
           >
-            <Link href="/audit/new">
-              Talk to Sales
-            </Link>
+            <Link href="/audit/new">Talk to Sales</Link>
           </Button>
         </div>
       </div>

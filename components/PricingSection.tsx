@@ -161,11 +161,13 @@ export function PricingSection() {
               </div>
               <Button
                 size="lg"
-                variant={plan.popular ? "default" : "outline"}
+                variant={plan.popular ? "outline" : "outline"}
                 disabled={loadingPlan !== null}
                 onClick={() => handleSubscription(plan.name)}
-                className={`mt-8 w-full font-bold ${
-                  plan.popular ? "bg-primary hover:bg-primary/90" : "hover:bg-primary/5 hover:text-primary"
+                className={`mt-8 w-full h-12 font-bold px-8 transition-all ${
+                  plan.popular 
+                    ? "border-primary-foreground/20 bg-transparent text-white hover:bg-white/10 hover:text-white" 
+                    : "border-slate-200 bg-white text-slate-900 hover:border-primary hover:text-primary hover:bg-primary/5"
                 }`}
               >
                 {loadingPlan === plan.name ? (
