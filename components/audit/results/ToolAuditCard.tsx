@@ -29,21 +29,21 @@ export function ToolAuditCard({ result }: { result: AuditResult }) {
           </div>
         </div>
 
-        <div className="flex items-center gap-6 rounded-2xl border border-slate-100 bg-slate-50 px-6 py-3">
+        <div className="flex flex-1 items-center justify-between sm:justify-end gap-3 sm:gap-6 rounded-2xl border border-slate-100 bg-slate-50 px-4 sm:px-6 py-3">
           <div className="text-center">
-            <div className="mb-0.5 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            <div className="mb-0.5 text-[8px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-400">
               Current
             </div>
-            <div className="text-sm font-bold text-slate-500 line-through">
+            <div className="text-xs sm:text-sm font-bold text-slate-500 line-through">
               ${result.currentSpend}
             </div>
           </div>
-          <ArrowRight className="h-4 w-4 text-slate-300" />
+          <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 text-slate-300" />
           <div className="text-center">
-            <div className="mb-0.5 text-[10px] font-bold uppercase tracking-widest text-primary">
+            <div className="mb-0.5 text-[8px] sm:text-[10px] font-bold uppercase tracking-widest text-primary">
               Optimized
             </div>
-            <div className="text-lg font-black text-slate-900">${result.optimizedSpend}</div>
+            <div className="text-base sm:text-lg font-black text-slate-900">${result.optimizedSpend}</div>
           </div>
         </div>
       </div>

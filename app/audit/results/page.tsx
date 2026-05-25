@@ -9,6 +9,7 @@ import { ToolAuditCard } from "@/components/audit/results/ToolAuditCard";
 import { SavingsCharts } from "@/components/audit/results/SavingsChart";
 import { EmailAuditGate } from "@/components/audit/results/EmailAuditGate";
 import { HighSavingsModal } from "@/components/audit/results/HighSavingsModal";
+import { BookingModal } from "@/components/BookingModal";
 import { ReportCover } from "@/components/audit/report/ReportCover";
 import { ReportSummary } from "@/components/audit/report/ReportSummary";
 import { ReportCharts } from "@/components/audit/report/ReportCharts";
@@ -139,7 +140,7 @@ export default function ResultsPage() {
       <Navbar />
 
       {/* HIDDEN REPORT ENGINE - OFF SCREEN */}
-      <div className="fixed -left-[9999px] top-0 pointer-events-none opacity-0 select-none">
+      <div className="fixed -left-[9999px] top-0 pointer-events-none opacity-0 select-none overflow-hidden">
         <div id="report-cover">
           <ReportCover auditId="DX-4402-991" timestamp={new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} />
         </div>
@@ -165,7 +166,7 @@ export default function ResultsPage() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 sm:px-8">
         <AnimatePresence mode="wait">
           {isScanning ? (
             <motion.div
@@ -194,49 +195,49 @@ export default function ResultsPage() {
               />
               
               {/* Header Actions */}
-              <div className="flex flex-col justify-between gap-4 border-b border-slate-200 pb-8 sm:flex-row sm:items-center">
+              <div className="flex flex-col justify-between gap-6 border-b border-slate-200 pb-8 sm:flex-row sm:items-center">
                 <div>
-                  <h1 className="text-3xl font-black tracking-tight text-slate-900">
+                  <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900">
                     Audit Dashboard
                   </h1>
-                  <p className="mt-1 text-sm font-medium text-slate-500">
+                  <p className="mt-1 text-xs sm:text-sm font-medium text-slate-500">
                     Surgical report for your engineering AI stack.
                   </p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                   <Button 
                     variant="outline" 
-                    className="h-11 rounded-xl bg-white font-bold hover:bg-slate-50"
+                    className="h-10 sm:h-11 px-3 sm:px-4 rounded-xl bg-white text-xs sm:text-sm font-bold hover:bg-slate-50"
                     onClick={handleDownloadPDF}
                     disabled={isDownloading}
                   >
                     {isDownloading ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <Loader2 className="mr-2 h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
                     ) : (
-                      <Download className="mr-2 h-4 w-4" />
+                      <Download className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                     )}
                     PDF Report
                   </Button>
-                  <Button variant="outline" className="h-11 rounded-xl bg-white font-bold hover:bg-slate-50">
-                    <Twitter className="mr-2 h-4 w-4 text-[#1DA1F2]" />
-                    Share on X
+                  <Button variant="outline" className="h-10 sm:h-11 px-3 sm:px-4 rounded-xl bg-white text-xs sm:text-sm font-bold hover:bg-slate-50">
+                    <Twitter className="mr-2 h-3 w-3 sm:h-4 sm:w-4 text-[#1DA1F2]" />
+                    X
                   </Button>
-                  <Button variant="outline" className="h-11 rounded-xl bg-white font-bold hover:bg-slate-50">
-                    <Linkedin className="mr-2 h-4 w-4 text-[#0A66C2]" />
+                  <Button variant="outline" className="h-10 sm:h-11 px-3 sm:px-4 rounded-xl bg-white text-xs sm:text-sm font-bold hover:bg-slate-50">
+                    <Linkedin className="mr-2 h-3 w-3 sm:h-4 sm:w-4 text-[#0A66C2]" />
                     Post
                   </Button>
                   <Button
                     onClick={handleShare}
-                    className="h-11 min-w-[140px] rounded-xl font-bold shadow-lg shadow-primary/20"
+                    className="h-10 sm:h-11 px-3 sm:px-5 min-w-[100px] sm:min-w-[140px] rounded-xl text-xs sm:text-sm font-bold shadow-lg shadow-primary/20"
                   >
                     {copied ? (
                       <>
-                        <Check className="mr-2 h-4 w-4 text-emerald-400" />
-                        Copied Link
+                        <Check className="mr-2 h-3 w-3 sm:h-4 sm:w-4 text-emerald-400" />
+                        Copied
                       </>
                     ) : (
                       <>
-                        <Share2 className="mr-2 h-4 w-4" />
+                        <Share2 className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                         Copy Link
                       </>
                     )}
@@ -245,32 +246,32 @@ export default function ResultsPage() {
               </div>
 
               {/* PDF EXPORT AREA: FROM AI SUMMARY TO LAST BREAKDOWN */}
-              <div className="space-y-12 bg-white/40 p-1 rounded-[3rem] -m-1">
+              <div className="space-y-8 sm:space-y-12 bg-white/40 p-1 rounded-[2rem] sm:rounded-[3rem] -m-1">
                 {/* AI Summary Section */}
-                <div className="rounded-3xl border border-primary/10 bg-white p-8 shadow-sm">
-                  <div className="mb-6 flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <Sparkles size={18} />
+                <div className="rounded-2xl sm:rounded-3xl border border-primary/10 bg-white p-5 sm:p-8 shadow-sm">
+                  <div className="mb-4 sm:mb-6 flex items-center gap-3">
+                    <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <Sparkles size={16} className="sm:w-[18px]" />
                     </div>
-                    <h2 className="text-lg font-black tracking-tight text-slate-900">
+                    <h2 className="text-base sm:text-lg font-black tracking-tight text-slate-900">
                       AI-Generated Intelligence Summary
                     </h2>
                   </div>
                   
                   {aiLoading ? (
                     <div className="space-y-3">
-                      <Skeleton className="h-4 w-full" />
-                      <Skeleton className="h-4 w-[92%]" />
-                      <Skeleton className="h-4 w-[95%]" />
-                      <Skeleton className="h-4 w-[40%] mt-4" />
+                      <Skeleton className="h-3 sm:h-4 w-full" />
+                      <Skeleton className="h-3 sm:h-4 w-[92%]" />
+                      <Skeleton className="h-3 sm:h-4 w-[95%]" />
+                      <Skeleton className="h-3 sm:h-4 w-[40%] mt-2 sm:mt-4" />
                     </div>
                   ) : (
                     <div className="relative">
-                      <p className="text-lg font-medium leading-relaxed text-slate-600">
+                      <p className="text-base sm:text-lg font-medium leading-relaxed text-slate-600">
                         {aiSummary}
                       </p>
-                      <div className="mt-6 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary">
-                        <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
+                      <div className="mt-4 sm:mt-6 flex items-center gap-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-primary">
+                        <span className="flex h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-primary animate-pulse" />
                         Analysis complete via Google Gemini Flash Latest
                       </div>
                     </div>
@@ -331,13 +332,15 @@ export default function ResultsPage() {
                     hours. No disruption, just pure efficiency.
                   </p>
                   <div className="flex flex-col items-center justify-center gap-4 pt-4 sm:flex-row">
-                    <Button
-                      size="lg"
-                      className="h-14 w-full bg-white px-10 text-lg font-black text-primary shadow-xl hover:bg-slate-50 sm:w-auto"
-                    >
-                      Book Migration Strategy
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
+                    <BookingModal>
+                      <Button
+                        size="lg"
+                        className="h-14 w-full bg-white px-10 text-lg font-black text-primary shadow-xl hover:bg-slate-50 sm:w-auto"
+                      >
+                        Book Migration Strategy
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Button>
+                    </BookingModal>
                     <p className="text-sm font-bold opacity-60">15-min discovery call</p>
                   </div>
                 </div>

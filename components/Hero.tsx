@@ -7,12 +7,16 @@ import { ChevronRight, ShieldCheck, Zap, MousePointer2, MessageSquare, Brain } f
 
 export function Hero() {
   return (
-    <div className="relative overflow-hidden bg-slate-50/50 pt-[64px]">
-      {/* Background Decorative Elements */}
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_40%_at_50%_30%,rgba(59,130,246,0.08)_0%,transparent_100%)]" />
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(35%_35%_at_50%_60%,rgba(16,185,129,0.04)_0%,transparent_100%)]" />
+    <div className="relative overflow-hidden pt-[64px]">
+      {/* Custom Blurred Background Image */}
+      <div 
+        className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat opacity-80 blur-3xl scale-110"
+        style={{ backgroundImage: `url('https://res.cloudinary.com/ddvxls9az/image/upload/v1779723788/bgDex_e0dzi9.png')` }}
+      />
+      {/* Overlay to ensure text readability */}
+      <div className="absolute inset-0 -z-10 bg-slate-50/40 backdrop-blur-[2px]" />
 
-      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-32 relative z-10">
         <div className="flex flex-col items-center text-center">
           {/* Badge */}
           <motion.div

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Lock, ArrowRight, ShieldCheck } from "lucide-react";
+import { Mail, Lock, ArrowRight, ShieldCheck, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { captureLead } from "@/lib/actions/leads";
@@ -59,13 +59,22 @@ export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-lg space-y-6 rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-2xl"
+        className="w-full max-w-lg space-y-6 rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 text-center shadow-2xl relative overflow-hidden"
       >
+        <button
+          onClick={onUnlock}
+          className="absolute right-4 top-4 sm:right-6 sm:top-6 text-slate-400 hover:text-slate-900 transition-colors"
+          type="button"
+          aria-label="Close and view report"
+        >
+          <X size={20} className="sm:w-6 sm:h-6" />
+        </button>
+
         <div className="space-y-3">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-            <Lock size={32} />
+          <div className="mx-auto flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+            <Lock size={24} className="sm:w-8 sm:h-8" />
           </div>
-          <h2 className="text-3xl font-black tracking-tighter text-slate-900">
+          <h2 className="text-2xl sm:text-3xl font-black tracking-tighter text-slate-900">
             Unlock Your Full Audit
           </h2>
           <p className="text-sm font-medium leading-relaxed text-slate-500">
@@ -94,7 +103,7 @@ export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <label htmlFor="gate-company" className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
                 Company (Optional)
@@ -129,6 +138,14 @@ export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
             {isSubmitting ? "Generating Report..." : "Get Detailed Results"}
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
+
+          <button
+            type="button"
+            onClick={onUnlock}
+            className="mt-4 w-full text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-primary transition-colors py-2"
+          >
+            Skip for now, view report directly
+          </button>
         </form>
 
         <div className="flex items-center justify-center gap-6 border-t border-slate-100 pt-4">

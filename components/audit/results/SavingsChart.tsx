@@ -24,19 +24,23 @@ const CustomTick = (props: any) => {
   const { x, y, payload } = props;
   const tool = SUPPORTED_TOOLS.find((t) => t.name === payload.value || t.id === payload.value);
   
+  // Responsive icon size
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  const size = isMobile ? 14 : 20;
+
   return (
-    <g transform={`translate(${x - 10},${y + 10})`}>
+    <g transform={`translate(${x - size / 2},${y + 10})`}>
       {tool?.logo ? (
         <image
           xlinkHref={tool.logo}
           x="0"
           y="0"
-          width="20"
-          height="20"
+          width={size}
+          height={size}
           style={{ filter: "grayscale(100%)", opacity: 0.8 }}
         />
       ) : (
-        <text x="0" y="15" fill="#64748b" fontSize="10" fontWeight="700">
+        <text x="0" y="15" fill="#64748b" fontSize={isMobile ? "8" : "10"} fontWeight="700">
           {payload.value}
         </text>
       )}
@@ -72,6 +76,15 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export function SavingsCharts({ results }: SavingsChartsProps) {
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const barData = results.map((r) => ({
     name: r.toolName,
     current: r.currentSpend,
@@ -88,13 +101,13 @@ export function SavingsCharts({ results }: SavingsChartsProps) {
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       {/* Spend Comparison Bar Chart */}
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm overflow-hidden">
         <h3 className="mb-6 text-[10px] font-black uppercase tracking-widest text-slate-400">
           Spend Comparison (Monthly)
         </h3>
-        <div className="h-[300px] w-full">
+        <div className="h-[250px] sm:h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={barData} margin={{ top: 0, right: 0, left: -20, bottom: 20 }}>
+            <BarChart data={barData} margin={{ top: 0, right: 10, left: isMobile ? -30 : -20, bottom: 20 }}>
               <defs>
                 <linearGradient id="optimizedGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
@@ -116,25 +129,25 @@ export function SavingsCharts({ results }: SavingsChartsProps) {
               <YAxis
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 10, fontWeight: 700, fill: "#64748b" }}
+                tick={{ fontSize: 9, fontWeight: 700, fill: "#64748b" }}
               />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: "#f8fafc" }} />
               <Bar
                 dataKey="current"
                 fill="url(#currentGradient)"
-                radius={[6, 6, 0, 0]}
-                barSize={32}
+                radius={[4, 4, 0, 0]}
+                barSize={isMobile ? 20 : 32}
               />
               <Bar
                 dataKey="optimized"
                 fill="url(#optimizedGradient)"
-                radius={[6, 6, 0, 0]}
-                barSize={32}
+                radius={[4, 4, 0, 0]}
+                barSize={isMobile ? 20 : 32}
               />
             </BarChart>
           </ResponsiveContainer>
         </div>
-        <div className="mt-4 flex items-center justify-center gap-6">
+        <div className="mt-4 flex items-center justify-center gap-4 sm:gap-6">
           <div className="flex items-center gap-2">
             <div className="h-3 w-3 rounded bg-slate-200" />
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
@@ -151,19 +164,19 @@ export function SavingsCharts({ results }: SavingsChartsProps) {
       </div>
 
       {/* Spend Distribution Pie Chart */}
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm overflow-hidden">
         <h3 className="mb-6 text-[10px] font-black uppercase tracking-widest text-slate-400">
           Spend Distribution
         </h3>
-        <div className="flex h-[300px] w-full items-center justify-center">
+        <div className="flex h-[250px] sm:h-[300px] w-full items-center justify-center">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={pieData}
                 cx="50%"
                 cy="50%"
-                innerRadius={60}
-                outerRadius={100}
+                innerRadius={isMobile ? 45 : 60}
+                outerRadius={isMobile ? 75 : 100}
                 paddingAngle={5}
                 dataKey="value"
               >
@@ -181,14 +194,14 @@ export function SavingsCharts({ results }: SavingsChartsProps) {
             </PieChart>
           </ResponsiveContainer>
         </div>
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-6 gap-y-2">
           {pieData.map((item, i) => (
             <div key={i} className="flex items-center gap-2">
               <div
                 className="h-2 w-2 rounded-full"
                 style={{ backgroundColor: COLORS[i % COLORS.length] }}
               />
-              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-500">
                 {item.name}
               </span>
             </div>

@@ -29,31 +29,31 @@ export function ResultsHero({ totalCurrent, totalOptimized, savings }: ResultsHe
                 Surgical Scan Verified
               </span>
             </div>
-            <h1 className="text-4xl font-black tracking-tighter">Your AI Spend Optimized.</h1>
+            <h1 className="text-2xl sm:text-4xl font-black tracking-tighter leading-tight">Your AI Spend Optimized.</h1>
           </div>
 
-          <div className="mt-8 flex items-baseline gap-4">
-            <div className="text-7xl font-black tracking-tighter text-white">
+          <div className="mt-8 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
+            <div className="text-5xl sm:text-7xl font-black tracking-tighter text-white">
               ${savings.toLocaleString()}
             </div>
-            <div className="text-xl font-bold text-slate-400">/ YEAR SAVED</div>
+            <div className="text-sm sm:text-xl font-bold text-slate-400 uppercase tracking-widest">/ Year Saved</div>
           </div>
 
-          <div className="mt-8 flex gap-6 border-t border-white/10 pt-6">
-            <div>
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 sm:gap-6 border-t border-white/10 pt-6">
+            <div className="flex-1">
               <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-slate-500">
                 Current Spend
               </div>
-              <div className="text-xl font-bold text-slate-300">
+              <div className="text-lg sm:text-xl font-bold text-slate-300">
                 ${(totalCurrent * 12).toLocaleString()}
               </div>
             </div>
-            <div className="mt-2 h-10 w-[1px] bg-white/10" />
-            <div>
+            <div className="hidden sm:block mt-2 h-10 w-[1px] bg-white/10" />
+            <div className="flex-1">
               <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-slate-500">
                 Optimized Spend
               </div>
-              <div className="text-xl font-bold text-primary">
+              <div className="text-lg sm:text-xl font-bold text-primary">
                 ${(totalOptimized * 12).toLocaleString()}
               </div>
             </div>
