@@ -58,15 +58,37 @@ export function ToolSupport() {
               </thead>
               <tbody className="divide-y text-sm">
                 {[
-                  { name: "Cursor", logo: "/tools/cursor.svg", pro: "$20", team: "$40", savings: "25%" },
-                  { name: "Claude", logo: "/tools/claude.svg", pro: "$20", team: "$30", savings: "30%" },
-                  { name: "ChatGPT", logo: "/tools/chatgpt.svg", pro: "$20", team: "$25", savings: "15%" },
+                  {
+                    name: "Cursor",
+                    logo: "/tools/cursor.svg",
+                    pro: "$20",
+                    team: "$40",
+                    savings: "25%",
+                  },
+                  {
+                    name: "Claude",
+                    logo: "/tools/claude.svg",
+                    pro: "$20",
+                    team: "$30",
+                    savings: "30%",
+                  },
+                  {
+                    name: "ChatGPT",
+                    logo: "/tools/chatgpt.svg",
+                    pro: "$20",
+                    team: "$25",
+                    savings: "15%",
+                  },
                 ].map((row) => (
                   <tr key={row.name} className="transition-colors hover:bg-slate-50">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={row.logo} alt={row.name} className="h-4 w-4 grayscale opacity-70" />
+                        <img
+                          src={row.logo}
+                          alt={row.name}
+                          className="h-4 w-4 opacity-70 grayscale"
+                        />
                         <span className="font-bold text-slate-900">{row.name}</span>
                       </div>
                     </td>

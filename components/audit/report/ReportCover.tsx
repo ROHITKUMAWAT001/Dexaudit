@@ -8,10 +8,10 @@ interface ReportCoverProps {
 
 export function ReportCover({ auditId, timestamp }: ReportCoverProps) {
   return (
-    <div className="w-[794px] h-[1123px] bg-white p-20 flex flex-col justify-between border-[12px] border-slate-50 relative overflow-hidden">
+    <div className="relative flex h-[1123px] w-[794px] flex-col justify-between overflow-hidden border-[12px] border-slate-50 bg-white p-20">
       {/* Decorative Luxury Element */}
-      <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-      <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute -right-40 -top-40 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
+      <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
 
       {/* Top Section */}
       <div className="flex items-center justify-between">
@@ -21,11 +21,13 @@ export function ReportCover({ auditId, timestamp }: ReportCoverProps) {
           </div>
           <div>
             <span className="text-2xl font-black tracking-tighter text-slate-900">DEXAUDIT</span>
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary leading-none mt-0.5">Surgical Intelligence</p>
+            <p className="mt-0.5 text-[10px] font-bold uppercase leading-none tracking-[0.2em] text-primary">
+              Surgical Intelligence
+            </p>
           </div>
         </div>
         <div className="flex flex-col items-end">
-          <div className="flex items-center gap-2 text-emerald-600 font-bold text-xs bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100">
+          <div className="flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-600">
             <ShieldCheck size={14} />
             VERIFIED AUDIT
           </div>
@@ -33,14 +35,15 @@ export function ReportCover({ auditId, timestamp }: ReportCoverProps) {
       </div>
 
       {/* Center Section */}
-      <div className="space-y-8 relative">
-        <div className="h-1 w-24 bg-primary rounded-full" />
-        <h1 className="text-6xl font-black tracking-tight text-slate-900 leading-[1.1]">
+      <div className="relative space-y-8">
+        <div className="h-1 w-24 rounded-full bg-primary" />
+        <h1 className="text-6xl font-black leading-[1.1] tracking-tight text-slate-900">
           AI Infrastructure <br />
-          <span className="text-slate-400 font-medium">Optimization Audit</span>
+          <span className="font-medium text-slate-400">Optimization Audit</span>
         </h1>
-        <p className="text-xl text-slate-500 font-medium max-w-lg leading-relaxed">
-          A defensible financial analysis and strategic roadmap for engineering tool stack efficiency.
+        <p className="max-w-lg text-xl font-medium leading-relaxed text-slate-500">
+          A defensible financial analysis and strategic roadmap for engineering tool stack
+          efficiency.
         </p>
       </div>
 
@@ -48,29 +51,41 @@ export function ReportCover({ auditId, timestamp }: ReportCoverProps) {
       <div className="space-y-12">
         <div className="grid grid-cols-2 gap-16 border-t border-slate-100 pt-12">
           <div className="space-y-2">
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Report Identification</p>
-            <p className="text-sm font-bold text-slate-900 font-mono">{auditId}</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+              Report Identification
+            </p>
+            <p className="font-mono text-sm font-bold text-slate-900">{auditId}</p>
           </div>
           <div className="space-y-2">
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Audit Completion</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+              Audit Completion
+            </p>
             <p className="text-sm font-bold text-slate-900">{timestamp}</p>
           </div>
           <div className="space-y-2">
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Issuing Entity</p>
-            <p className="text-sm font-bold text-slate-900 leading-tight">CREDEX INC.<br />Secondary Market Intelligence</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+              Issuing Entity
+            </p>
+            <p className="text-sm font-bold leading-tight text-slate-900">
+              CREDEX INC.
+              <br />
+              Secondary Market Intelligence
+            </p>
           </div>
           <div className="space-y-2">
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Classification</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+              Classification
+            </p>
             <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
-                <FileCheck size={16} className="text-primary" />
-                Confidential - External Audit
+              <FileCheck size={16} className="text-primary" />
+              Confidential - External Audit
             </div>
           </div>
         </div>
 
-        <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 tracking-widest uppercase border-t border-slate-50 pt-8">
-            <p>© 2026 CREDEX INC. ALL RIGHTS RESERVED.</p>
-            <p>DO-PN: 104-552-01</p>
+        <div className="flex items-center justify-between border-t border-slate-50 pt-8 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+          <p>© 2026 CREDEX INC. ALL RIGHTS RESERVED.</p>
+          <p>DO-PN: 104-552-01</p>
         </div>
       </div>
     </div>

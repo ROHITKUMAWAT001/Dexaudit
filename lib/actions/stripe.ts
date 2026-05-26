@@ -2,10 +2,9 @@
 
 import Stripe from "stripe";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2024-12-18.acacia" as any,
+  apiVersion: "2026-04-22.dahlia" as const,
 });
 
 export async function createCheckoutSession(planName: string) {
@@ -33,8 +32,8 @@ export async function createCheckoutSession(planName: string) {
     });
 
     return { url: session.url };
-  } catch (err: any) {
+  } catch (err) {
     console.error("Stripe Error:", err);
-    return { error: err.message };
+    return { error: (err as Error).message };
   }
 }

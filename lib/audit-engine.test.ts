@@ -14,7 +14,7 @@ describe("DexAudit Mathematical Engine", () => {
     const results = runSurgicalAudit(selectedTools, toolDetails, teamSize);
     const cursorResult = results[0];
 
-    // 5 seats for 2 devs = 3 ghost seats. 
+    // 5 seats for 2 devs = 3 ghost seats.
     // Cost per seat = 100/5 = 20.
     // Optimized spend = 2 * 20 = 40.
     expect(cursorResult.optimizedSpend).toBe(40);

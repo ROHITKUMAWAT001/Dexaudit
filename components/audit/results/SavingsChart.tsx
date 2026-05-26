@@ -20,12 +20,13 @@ interface SavingsChartsProps {
   results: AuditResult[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomTick = (props: any) => {
   const { x, y, payload } = props;
   const tool = SUPPORTED_TOOLS.find((t) => t.name === payload.value || t.id === payload.value);
-  
+
   // Responsive icon size
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
   const size = isMobile ? 14 : 20;
 
   return (
@@ -48,10 +49,11 @@ const CustomTick = (props: any) => {
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-2xl z-[150]">
+      <div className="z-[150] rounded-2xl border border-slate-100 bg-white p-4 shadow-2xl">
         <p className="mb-2 text-xs font-black uppercase tracking-widest text-slate-400">{label}</p>
         <div className="space-y-1.5">
           <div className="flex items-center justify-between gap-8">
@@ -62,7 +64,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
             <span className="text-sm font-medium text-slate-500">Optimized</span>
             <span className="text-sm font-bold text-emerald-600">${payload[1].value}</span>
           </div>
-          <div className="mt-2 border-t border-slate-50 pt-2 flex items-center justify-between gap-8">
+          <div className="mt-2 flex items-center justify-between gap-8 border-t border-slate-50 pt-2">
             <span className="text-sm font-bold text-primary">Potential Savings</span>
             <span className="text-sm font-black text-primary">
               ${payload[0].value - payload[1].value}
@@ -81,8 +83,8 @@ export function SavingsCharts({ results }: SavingsChartsProps) {
   React.useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 640);
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   const barData = results.map((r) => ({
@@ -101,13 +103,16 @@ export function SavingsCharts({ results }: SavingsChartsProps) {
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       {/* Spend Comparison Bar Chart */}
-      <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm overflow-hidden">
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6">
         <h3 className="mb-6 text-[10px] font-black uppercase tracking-widest text-slate-400">
           Spend Comparison (Monthly)
         </h3>
-        <div className="h-[250px] sm:h-[300px] w-full">
+        <div className="h-[250px] w-full sm:h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={barData} margin={{ top: 0, right: 10, left: isMobile ? -30 : -20, bottom: 20 }}>
+            <BarChart
+              data={barData}
+              margin={{ top: 0, right: 10, left: isMobile ? -30 : -20, bottom: 20 }}
+            >
               <defs>
                 <linearGradient id="optimizedGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
@@ -164,11 +169,11 @@ export function SavingsCharts({ results }: SavingsChartsProps) {
       </div>
 
       {/* Spend Distribution Pie Chart */}
-      <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm overflow-hidden">
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6">
         <h3 className="mb-6 text-[10px] font-black uppercase tracking-widest text-slate-400">
           Spend Distribution
         </h3>
-        <div className="flex h-[250px] sm:h-[300px] w-full items-center justify-center">
+        <div className="flex h-[250px] w-full items-center justify-center sm:h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -194,14 +199,14 @@ export function SavingsCharts({ results }: SavingsChartsProps) {
             </PieChart>
           </ResponsiveContainer>
         </div>
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-6 gap-y-2">
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-6">
           {pieData.map((item, i) => (
             <div key={i} className="flex items-center gap-2">
               <div
                 className="h-2 w-2 rounded-full"
                 style={{ backgroundColor: COLORS[i % COLORS.length] }}
               />
-              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-500">
+              <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500 sm:text-[10px]">
                 {item.name}
               </span>
             </div>

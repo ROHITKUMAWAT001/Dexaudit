@@ -41,7 +41,7 @@ export function Footer() {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData(e.currentTarget);
-    
+
     // Honeypot check
     const honeypot = formData.get("website") as string;
     if (honeypot) {
@@ -137,7 +137,13 @@ export function Footer() {
               </p>
             </div>
             <form className="flex w-full max-w-sm items-center gap-2" onSubmit={handleNewsletter}>
-              <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
+              <input
+                type="text"
+                name="website"
+                className="hidden"
+                tabIndex={-1}
+                autoComplete="off"
+              />
               <input
                 id="newsletter-email"
                 name="email"

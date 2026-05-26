@@ -19,7 +19,7 @@ export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     const honeypot = formData.get("website") as string;
     if (honeypot) {
@@ -38,7 +38,7 @@ export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
       email,
       company_name: company,
       role,
-      team_size: teamSize,
+      team_size: parseInt(teamSize) || 0,
       audit_data: { selectedTools, toolDetails },
       savings: totalAnnualSavings,
     });
@@ -59,22 +59,22 @@ export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-lg space-y-6 rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 text-center shadow-2xl relative overflow-hidden"
+        className="relative w-full max-w-lg space-y-6 overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 text-center shadow-2xl sm:p-10"
       >
         <button
           onClick={onUnlock}
-          className="absolute right-4 top-4 sm:right-6 sm:top-6 text-slate-400 hover:text-slate-900 transition-colors"
+          className="absolute right-4 top-4 text-slate-400 transition-colors hover:text-slate-900 sm:right-6 sm:top-6"
           type="button"
           aria-label="Close and view report"
         >
-          <X size={20} className="sm:w-6 sm:h-6" />
+          <X size={20} className="sm:h-6 sm:w-6" />
         </button>
 
         <div className="space-y-3">
-          <div className="mx-auto flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-            <Lock size={24} className="sm:w-8 sm:h-8" />
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary sm:h-16 sm:w-16">
+            <Lock size={24} className="sm:h-8 sm:w-8" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black tracking-tighter text-slate-900">
+          <h2 className="text-2xl font-black tracking-tighter text-slate-900 sm:text-3xl">
             Unlock Your Full Audit
           </h2>
           <p className="text-sm font-medium leading-relaxed text-slate-500">
@@ -86,7 +86,10 @@ export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
         <form onSubmit={handleSubmit} className="space-y-4 text-left">
           <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
           <div className="space-y-1.5">
-            <label htmlFor="gate-email" className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
+            <label
+              htmlFor="gate-email"
+              className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400"
+            >
               Work Email
             </label>
             <div className="relative">
@@ -103,9 +106,12 @@ export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <label htmlFor="gate-company" className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
+              <label
+                htmlFor="gate-company"
+                className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400"
+              >
                 Company (Optional)
               </label>
               <Input
@@ -117,7 +123,10 @@ export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
               />
             </div>
             <div className="space-y-1.5">
-              <label htmlFor="gate-role" className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
+              <label
+                htmlFor="gate-role"
+                className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400"
+              >
                 Role (Optional)
               </label>
               <Input
@@ -142,7 +151,7 @@ export function EmailAuditGate({ onUnlock }: { onUnlock: () => void }) {
           <button
             type="button"
             onClick={onUnlock}
-            className="mt-4 w-full text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-primary transition-colors py-2"
+            className="mt-4 w-full py-2 text-xs font-bold uppercase tracking-widest text-slate-400 transition-colors hover:text-primary"
           >
             Skip for now, view report directly
           </button>

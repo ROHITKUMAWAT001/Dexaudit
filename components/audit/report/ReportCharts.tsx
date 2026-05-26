@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
 import { AuditResult } from "@/lib/audit-engine";
 import * as React from "react";
 
@@ -24,19 +16,25 @@ export function ReportCharts({ results }: ReportChartsProps) {
   }));
 
   return (
-    <div className="w-[794px] h-[1123px] bg-white p-20 flex flex-col border-[12px] border-slate-50">
+    <div className="flex h-[1123px] w-[794px] flex-col border-[12px] border-slate-50 bg-white p-20">
       {/* Header */}
-      <div className="flex justify-between items-center border-b border-slate-100 pb-12 mb-16">
+      <div className="mb-16 flex items-center justify-between border-b border-slate-100 pb-12">
         <div className="space-y-1">
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight">Visual Expenditure Analysis</h2>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Section 01.B / Visual Intelligence</p>
+          <h2 className="text-2xl font-black tracking-tight text-slate-900">
+            Visual Expenditure Analysis
+          </h2>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            Section 01.B / Visual Intelligence
+          </p>
         </div>
       </div>
 
       <div className="grow space-y-16">
         {/* Main Chart Container */}
-        <div className="rounded-3xl border border-slate-100 bg-slate-50/30 p-10 shadow-inner h-[500px]">
-          <h3 className="mb-10 text-xs font-black uppercase tracking-[0.2em] text-slate-400 text-center">Monthly Expenditure Delta</h3>
+        <div className="h-[500px] rounded-3xl border border-slate-100 bg-slate-50/30 p-10 shadow-inner">
+          <h3 className="mb-10 text-center text-xs font-black uppercase tracking-[0.2em] text-slate-400">
+            Monthly Expenditure Delta
+          </h3>
           <div className="h-[350px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={barData} margin={{ top: 0, right: 0, left: -10, bottom: 0 }}>
@@ -59,12 +57,7 @@ export function ReportCharts({ results }: ReportChartsProps) {
                   tickLine={false}
                   tick={{ fontSize: 10, fontWeight: 700, fill: "#64748b" }}
                 />
-                <Bar
-                  dataKey="current"
-                  fill="#cbd5e1"
-                  radius={[4, 4, 0, 0]}
-                  barSize={40}
-                />
+                <Bar dataKey="current" fill="#cbd5e1" radius={[4, 4, 0, 0]} barSize={40} />
                 <Bar
                   dataKey="optimized"
                   fill="url(#pdfOptimized)"
@@ -77,34 +70,45 @@ export function ReportCharts({ results }: ReportChartsProps) {
           <div className="mt-12 flex items-center justify-center gap-12">
             <div className="flex items-center gap-3">
               <div className="h-4 w-4 rounded-md bg-slate-200" />
-              <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Baseline Spend</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-slate-500">
+                Baseline Spend
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <div className="h-4 w-4 rounded-md bg-primary shadow-lg shadow-primary/20" />
-              <span className="text-xs font-bold uppercase tracking-widest text-primary">Optimized Target</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                Optimized Target
+              </span>
             </div>
           </div>
         </div>
 
         {/* Chart Commentary */}
         <div className="grid grid-cols-2 gap-12">
-            <div className="space-y-4">
-                <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest">Statistical Outliers</h4>
-                <p className="text-sm text-slate-500 leading-relaxed">
-                    The visualization highlights significant inefficiencies in the core infrastructure layer. The delta between baseline and target spend represents immediately recoverable liquidity.
-                </p>
-            </div>
-            <div className="space-y-4">
-                <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest">Audit Accuracy</h4>
-                <p className="text-sm text-slate-500 leading-relaxed">
-                    Data points are derived from real-time API pricing and verified plan seat minimums. Calculations maintain a 98% confidence interval for standard engineering workloads.
-                </p>
-            </div>
+          <div className="space-y-4">
+            <h4 className="text-xs font-black uppercase tracking-widest text-slate-900">
+              Statistical Outliers
+            </h4>
+            <p className="text-sm leading-relaxed text-slate-500">
+              The visualization highlights significant inefficiencies in the core infrastructure
+              layer. The delta between baseline and target spend represents immediately recoverable
+              liquidity.
+            </p>
+          </div>
+          <div className="space-y-4">
+            <h4 className="text-xs font-black uppercase tracking-widest text-slate-900">
+              Audit Accuracy
+            </h4>
+            <p className="text-sm leading-relaxed text-slate-500">
+              Data points are derived from real-time API pricing and verified plan seat minimums.
+              Calculations maintain a 98% confidence interval for standard engineering workloads.
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Page Footer */}
-      <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 tracking-widest border-t border-slate-50 pt-8">
+      <div className="flex items-center justify-between border-t border-slate-50 pt-8 text-[10px] font-bold tracking-widest text-slate-400">
         <p>CONFIDENTIAL BUSINESS INTELLIGENCE</p>
         <p>PAGE 03</p>
       </div>

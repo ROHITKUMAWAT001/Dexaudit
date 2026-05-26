@@ -68,9 +68,11 @@ export async function logout() {
 export async function getUser() {
   try {
     const supabase = await createServerSupabaseClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     return user;
-  } catch (error) {
+  } catch {
     return null;
   }
 }

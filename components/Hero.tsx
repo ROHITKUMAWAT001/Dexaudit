@@ -14,14 +14,16 @@ export function Hero() {
   return (
     <div className="relative overflow-hidden pt-[64px]">
       {/* Custom Blurred Background Image */}
-      <div 
-        className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat opacity-80 blur-3xl scale-110"
-        style={{ backgroundImage: `url('https://res.cloudinary.com/ddvxls9az/image/upload/v1779723788/bgDex_e0dzi9.png')` }}
+      <div
+        className="absolute inset-0 -z-20 scale-110 bg-cover bg-center bg-no-repeat opacity-80 blur-3xl"
+        style={{
+          backgroundImage: `url('https://res.cloudinary.com/ddvxls9az/image/upload/v1779723788/bgDex_e0dzi9.png')`,
+        }}
       />
       {/* Overlay to ensure text readability */}
       <div className="absolute inset-0 -z-10 bg-slate-50/40 backdrop-blur-[2px]" />
 
-      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-32 relative z-10">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-32">
         <div className="flex flex-col items-center text-center">
           {/* Badge */}
           <motion.div
@@ -52,8 +54,8 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mb-10 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl"
           >
-            The intelligent audit engine that detects seat-leakage, recalibrates your AI stack,
-            and optimizes your capital for maximum engineering efficiency.
+            The intelligent audit engine that detects seat-leakage, recalibrates your AI stack, and
+            optimizes your capital for maximum engineering efficiency.
           </motion.p>
 
           {/* CTAs */}
@@ -63,7 +65,11 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="mb-20 flex flex-col items-center gap-4 sm:flex-row"
           >
-            <Button asChild size="lg" className="h-12 w-full px-8 text-base font-bold sm:w-auto shadow-xl shadow-primary/20">
+            <Button
+              asChild
+              size="lg"
+              className="h-12 w-full px-8 text-base font-bold shadow-xl shadow-primary/20 sm:w-auto"
+            >
               <Link href="/audit/new">
                 Start Free Audit
                 <ChevronRight size={18} className="ml-2" />
@@ -73,7 +79,7 @@ export function Hero() {
               asChild
               size="lg"
               variant="outline"
-              className="h-12 w-full bg-white px-8 text-base font-bold sm:w-auto border-slate-200"
+              className="h-12 w-full border-slate-200 bg-white px-8 text-base font-bold sm:w-auto"
             >
               <Link href={hasAudit ? "/audit/results" : "/audit/new"}>
                 {hasAudit ? "View My Report" : "View Sample Report"}

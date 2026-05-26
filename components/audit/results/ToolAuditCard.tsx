@@ -29,21 +29,23 @@ export function ToolAuditCard({ result }: { result: AuditResult }) {
           </div>
         </div>
 
-        <div className="flex flex-1 items-center justify-between sm:justify-end gap-3 sm:gap-6 rounded-2xl border border-slate-100 bg-slate-50 px-4 sm:px-6 py-3">
+        <div className="flex flex-1 items-center justify-between gap-3 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 sm:justify-end sm:gap-6 sm:px-6">
           <div className="text-center">
-            <div className="mb-0.5 text-[8px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            <div className="mb-0.5 text-[8px] font-bold uppercase tracking-widest text-slate-400 sm:text-[10px]">
               Current
             </div>
-            <div className="text-xs sm:text-sm font-bold text-slate-500 line-through">
+            <div className="text-xs font-bold text-slate-500 line-through sm:text-sm">
               ${result.currentSpend}
             </div>
           </div>
-          <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 text-slate-300" />
+          <ArrowRight className="h-3 w-3 text-slate-300 sm:h-4 sm:w-4" />
           <div className="text-center">
-            <div className="mb-0.5 text-[8px] sm:text-[10px] font-bold uppercase tracking-widest text-primary">
+            <div className="mb-0.5 text-[8px] font-bold uppercase tracking-widest text-primary sm:text-[10px]">
               Optimized
             </div>
-            <div className="text-base sm:text-lg font-black text-slate-900">${result.optimizedSpend}</div>
+            <div className="text-base font-black text-slate-900 sm:text-lg">
+              ${result.optimizedSpend}
+            </div>
           </div>
         </div>
       </div>

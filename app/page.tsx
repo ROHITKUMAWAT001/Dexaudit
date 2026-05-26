@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { SocialProof } from "@/components/SocialProof";
 import { ProblemSection } from "@/components/ProblemSection";

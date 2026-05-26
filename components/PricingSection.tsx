@@ -12,12 +12,7 @@ const plans = [
     name: "Free Audit",
     price: "$0",
     description: "Perfect for solo founders and small side projects.",
-    features: [
-      "Single-tool audit",
-      "Basic savings detection",
-      "PDF Summary",
-      "Public share link",
-    ],
+    features: ["Single-tool audit", "Basic savings detection", "PDF Summary", "Public share link"],
     cta: "Start for free",
     icon: Zap,
     popular: false,
@@ -62,7 +57,7 @@ export function PricingSection() {
       toast.info("Free audits can be started directly from the home page.");
       return;
     }
-    
+
     if (planName === "Enterprise") {
       toast.success("Sales team notified! We'll reach out to your work email.");
       return;
@@ -80,7 +75,7 @@ export function PricingSection() {
   };
 
   return (
-    <section className="py-24 bg-white" id="pricing">
+    <section className="bg-white py-24" id="pricing">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="text-base font-black uppercase tracking-widest text-primary">Pricing</h2>
@@ -88,7 +83,8 @@ export function PricingSection() {
             Surgical precision. <br /> Predictable investment.
           </p>
           <p className="mt-6 text-lg leading-8 text-slate-600">
-            Choose the plan that fits your team's stage. Most teams recover the annual cost of DexAudit in their first scan.
+            Choose the plan that fits your team&apos;s stage. Most teams recover the annual cost of
+            DexAudit in their first scan.
           </p>
         </div>
 
@@ -102,7 +98,7 @@ export function PricingSection() {
               transition={{ delay: i * 0.1 }}
               className={`flex flex-col justify-between rounded-3xl p-8 ring-1 transition-all duration-300 ${
                 plan.popular
-                  ? "bg-slate-900 ring-slate-900 shadow-2xl scale-105 lg:z-10"
+                  ? "scale-105 bg-slate-900 shadow-2xl ring-slate-900 lg:z-10"
                   : "bg-white ring-slate-200 hover:ring-primary/20"
               }`}
             >
@@ -121,7 +117,9 @@ export function PricingSection() {
                     </p>
                   )}
                 </div>
-                <p className={`mt-4 text-sm leading-6 ${plan.popular ? "text-slate-400" : "text-slate-500"}`}>
+                <p
+                  className={`mt-4 text-sm leading-6 ${plan.popular ? "text-slate-400" : "text-slate-500"}`}
+                >
                   {plan.description}
                 </p>
                 <p className="mt-6 flex items-baseline gap-x-1">
@@ -164,10 +162,10 @@ export function PricingSection() {
                 variant={plan.popular ? "outline" : "outline"}
                 disabled={loadingPlan !== null}
                 onClick={() => handleSubscription(plan.name)}
-                className={`mt-8 w-full h-12 font-bold px-8 transition-all ${
-                  plan.popular 
-                    ? "border-primary-foreground/20 bg-transparent text-white hover:bg-white/10 hover:text-white" 
-                    : "border-slate-200 bg-white text-slate-900 hover:border-primary hover:text-primary hover:bg-primary/5"
+                className={`mt-8 h-12 w-full px-8 font-bold transition-all ${
+                  plan.popular
+                    ? "border-primary-foreground/20 bg-transparent text-white hover:bg-white/10 hover:text-white"
+                    : "border-slate-200 bg-white text-slate-900 hover:border-primary hover:bg-primary/5 hover:text-primary"
                 }`}
               >
                 {loadingPlan === plan.name ? (
@@ -179,9 +177,9 @@ export function PricingSection() {
             </motion.div>
           ))}
         </div>
-        
+
         <div className="mt-16 flex justify-center">
-          <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">
+          <p className="text-sm font-bold uppercase tracking-widest text-slate-400">
             * All audits include a 100% data privacy guarantee.
           </p>
         </div>

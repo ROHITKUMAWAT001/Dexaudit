@@ -40,21 +40,21 @@ Detect ghost seats, arbitrage AI plans, and stop burning runway on unused subscr
 
 ## 🎯 The Mission
 
-The modern engineering stack is fragmented. Startups routinely over-forecast AI needs—buying GitHub Copilot Enterprise, Claude Team, and Cursor Business—only to realize a fraction of their developers actually utilize the premium tiers. 
+The modern engineering stack is fragmented. Startups routinely over-forecast AI needs—buying GitHub Copilot Enterprise, Claude Team, and Cursor Business—only to realize a fraction of their developers actually utilize the premium tiers.
 
-There was no *“Mint for AI spend.”* **DexAudit exists to fix this.** It provides deterministic, zero-latency financial arbitrage, instantly identifying ghost seats, plan minimum violations, and volume discount opportunities. We build for CTOs who value fiscal clarity as much as technical velocity.
+There was no _“Mint for AI spend.”_ **DexAudit exists to fix this.** It provides deterministic, zero-latency financial arbitrage, instantly identifying ghost seats, plan minimum violations, and volume discount opportunities. We build for CTOs who value fiscal clarity as much as technical velocity.
 
 ---
 
 ## ✨ Core Features
 
-| Feature | Description | Status |
-| :--- | :--- | :--- |
-| **Surgical Arbitrage** | Deterministic math engine to catch plan downgrades (e.g., Copilot Enterprise -> Business). | ✅ Live |
-| **Ghost Seat Detection** | Cross-references actual headcount vs. purchased licenses to identify exact capital waste. | ✅ Live |
-| **Boardroom-Grade Export** | Client-side DOM-to-PDF compilation for beautiful, shareable C-suite reports. | ✅ Live |
-| **Frictionless Funnel** | Zero-login requirement to see baseline savings. High-intent email gate for the detailed breakdown. | ✅ Live |
-| **AI Executive Summary** | Google Gemini 1.5 Flash parses raw audit JSON to generate personalized consulting intelligence. | ✅ Live |
+| Feature                    | Description                                                                                        | Status  |
+| :------------------------- | :------------------------------------------------------------------------------------------------- | :------ |
+| **Surgical Arbitrage**     | Deterministic math engine to catch plan downgrades (e.g., Copilot Enterprise -> Business).         | ✅ Live |
+| **Ghost Seat Detection**   | Cross-references actual headcount vs. purchased licenses to identify exact capital waste.          | ✅ Live |
+| **Boardroom-Grade Export** | Client-side DOM-to-PDF compilation for beautiful, shareable C-suite reports.                       | ✅ Live |
+| **Frictionless Funnel**    | Zero-login requirement to see baseline savings. High-intent email gate for the detailed breakdown. | ✅ Live |
+| **AI Executive Summary**   | Google Gemini 1.5 Flash parses raw audit JSON to generate personalized consulting intelligence.    | ✅ Live |
 
 ---
 
@@ -63,20 +63,22 @@ There was no *“Mint for AI spend.”* **DexAudit exists to fix this.** It prov
 Built for velocity, scale, and extreme type safety.
 
 ### 💻 Frontend & UI
-| Tech | Role |
-| :--- | :--- |
+
+| Tech                        | Role                                                                                     |
+| :-------------------------- | :--------------------------------------------------------------------------------------- |
 | **Next.js 15 (App Router)** | Core React framework utilizing React Server Components (RSC) for minimal client-side JS. |
-| **Tailwind CSS v3** | Utility-first styling with zero runtime overhead. |
-| **shadcn/ui & Radix** | Headless accessible primitives for a minimal, "Pro" B2B aesthetic. |
-| **Zustand** | Lightweight atomic state management for the multi-step audit workflow. |
+| **Tailwind CSS v3**         | Utility-first styling with zero runtime overhead.                                        |
+| **shadcn/ui & Radix**       | Headless accessible primitives for a minimal, "Pro" B2B aesthetic.                       |
+| **Zustand**                 | Lightweight atomic state management for the multi-step audit workflow.                   |
 
 ### ⚙️ Backend & Infrastructure
-| Tech | Role |
-| :--- | :--- |
+
+| Tech                      | Role                                                                       |
+| :------------------------ | :------------------------------------------------------------------------- |
 | **Supabase (PostgreSQL)** | Persistent storage with Row Level Security (RLS) and integrated Auth APIs. |
-| **Vercel** | Global Edge deployment with sub-second Time-to-First-Byte (TTFB). |
-| **Stripe** | Dynamic Checkout flows for "Pro Tier" audit upgrades. |
-| **Resend** | Transactional email delivery for audit confirmations. |
+| **Vercel**                | Global Edge deployment with sub-second Time-to-First-Byte (TTFB).          |
+| **Stripe**                | Dynamic Checkout flows for "Pro Tier" audit upgrades.                      |
+| **Resend**                | Transactional email delivery for audit confirmations.                      |
 
 ---
 
@@ -123,7 +125,7 @@ sequenceDiagram
 
 ## 🧠 Engineering Decisions
 
-We prioritize shipping reliable products over chasing hyped patterns. 
+We prioritize shipping reliable products over chasing hyped patterns.
 
 <details>
 <summary><b>1. Client-Side Math vs. Server-Side Processing</b></summary>
@@ -165,11 +167,13 @@ We prioritize shipping reliable products over chasing hyped patterns.
 ## ⚡ Performance & Security
 
 ### Performance Metrics
+
 - **Lighthouse Performance:** 90+ (Optimized via RSC & Tailwind)
 - **Zero CLS:** Global Skeleton UI implemented across all dynamic routes.
 - **Payload:** Minimal client-side hydration via Next.js 15.
 
 ### Security & Abuse Prevention
+
 - **Honeypot Traps:** Invisible form fields to block automated bot submissions.
 - **Rate Limiting:** 60-second IP/Email cooldown on lead capture endpoints.
 - **Row Level Security (RLS):** Supabase DB strictly prevents anonymous read/write operations.
@@ -179,7 +183,7 @@ We prioritize shipping reliable products over chasing hyped patterns.
 ## 🚀 AI Strategy
 
 We explicitly do **not** use AI for math. LLMs hallucinate numbers.
-The financial calculations are 100% deterministic TypeScript logic based on verified vendor pricing. 
+The financial calculations are 100% deterministic TypeScript logic based on verified vendor pricing.
 
 AI (Gemini 1.5 Flash) is utilized strictly for **Qualitative Synthesis**—reading the JSON output of the math engine and generating a personalized, empathetic executive summary to build trust and bridge the gap between "Numbers" and "Actionable Strategy."
 
@@ -190,6 +194,7 @@ AI (Gemini 1.5 Flash) is utilized strictly for **Qualitative Synthesis**—readi
 Clone, Install, and Audit in under 2 minutes.
 
 ### Prerequisites
+
 - Node.js 20+
 - Supabase Project (Postgres)
 - Stripe API Keys

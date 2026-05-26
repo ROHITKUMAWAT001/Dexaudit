@@ -20,12 +20,9 @@ interface HighSavingsModalProps {
 export function HighSavingsModal({ isOpen, onOpenChange, savings }: HighSavingsModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent 
-        className="z-[110] !border-none !bg-transparent !p-0 !shadow-none !gap-0 sm:max-w-[440px] w-full !block overflow-visible outline-none ring-0 [scrollbar-gutter:auto!important]"
-      >
+      <DialogContent className="z-[110] !block w-full !gap-0 overflow-visible !border-none !bg-transparent !p-0 !shadow-none outline-none ring-0 [scrollbar-gutter:auto!important] sm:max-w-[440px]">
         {/* Custom Container with forced overlap to kill sub-pixel white gaps */}
-        <div className="relative -m-[1px] w-[calc(100%+2px)] bg-white rounded-[2rem] border border-slate-200 shadow-2xl overflow-hidden flex flex-col isolation-isolate">
-          
+        <div className="isolation-isolate relative -m-[1px] flex w-[calc(100%+2px)] flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-2xl">
           {/* Manual X Close Button */}
           {/* <button 
             onClick={() => onOpenChange(false)}
@@ -46,8 +43,8 @@ export function HighSavingsModal({ isOpen, onOpenChange, savings }: HighSavingsM
           </div>
 
           {/* Premium Header */}
-          <div className="relative w-full px-8 pb-8 pt-14 text-center border-b border-slate-100 bg-slate-50 flex flex-col items-center">
-            <div className="absolute top-0 left-[-2px] w-[calc(100%+4px)] h-1.5 bg-primary" />
+          <div className="relative flex w-full flex-col items-center border-b border-slate-100 bg-slate-50 px-8 pb-8 pt-14 text-center">
+            <div className="absolute left-[-2px] top-0 h-1.5 w-[calc(100%+4px)] bg-primary" />
 
             <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-3xl border border-emerald-100/50 bg-emerald-50 shadow-inner">
               <TrendingUp size={36} className="text-emerald-500" strokeWidth={2.5} />
@@ -78,7 +75,8 @@ export function HighSavingsModal({ isOpen, onOpenChange, savings }: HighSavingsM
                 .
               </p>
               <p className="text-sm leading-relaxed text-slate-500">
-                Our engineering experts will help you capture these savings without disrupting your engineering velocity.
+                Our engineering experts will help you capture these savings without disrupting your
+                engineering velocity.
               </p>
             </div>
 
@@ -91,7 +89,11 @@ export function HighSavingsModal({ isOpen, onOpenChange, savings }: HighSavingsM
                 }}
                 className="h-14 w-full bg-primary text-base font-bold shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98]"
               >
-                <a href="https://calendly.com/credex-demo" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://calendly.com/credex-demo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Book Strategy Call
                   <ExternalLink className="ml-2 h-4 w-4 opacity-70" />
                 </a>

@@ -36,7 +36,7 @@ export function BookingModal({ children, onOpenChange }: BookingModalProps) {
 
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     const honeypot = formData.get("website") as string;
-    
+
     if (honeypot) {
       // Quietly reject bots
       setTimeout(() => {

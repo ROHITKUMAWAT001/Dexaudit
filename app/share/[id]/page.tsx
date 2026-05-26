@@ -25,7 +25,7 @@ export default function PublicSharePage() {
 
   const data = decodeAuditData(shareData);
 
-  if (!data && !isLoading) {
+  if (!data) {
     return (
       <div className="flex h-screen items-center justify-center bg-slate-50">
         <div className="space-y-4 text-center">

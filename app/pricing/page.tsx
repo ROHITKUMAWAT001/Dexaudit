@@ -5,7 +5,8 @@ import { FinalCTA } from "@/components/FinalCTA";
 
 export const metadata: Metadata = {
   title: "Pricing | DexAudit",
-  description: "Transparent pricing for startups of all sizes. Audit your AI spend and start saving today.",
+  description:
+    "Transparent pricing for startups of all sizes. Audit your AI spend and start saving today.",
 };
 
 export default function PricingPage() {

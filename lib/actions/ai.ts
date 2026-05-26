@@ -31,21 +31,20 @@ export async function generateAuditSummary(results: AuditResult[], teamSize: str
     const response = await result.response;
     const text = response.text();
 
-    return { 
-      success: true, 
-      summary: text.trim() 
+    return {
+      success: true,
+      summary: text.trim(),
     };
-
   } catch (error) {
     console.error("Gemini API Error:", error);
-    
+
     // Generic professional fallback if API fails
     const totalSavings = results.reduce((acc, r) => acc + r.savings, 0) * 12;
     const fallback = `Based on our surgical audit of your AI stack for a team of ${teamSize}, we have identified significant capital efficiency opportunities totaling $${totalSavings.toLocaleString()} in potential annual savings. The primary drivers of waste include plan-tier mismatches and seat over-provisioning across your core tools. Consolidating your infrastructure into managed team environments will maximize your engineering ROI without impacting developer velocity.`;
 
-    return { 
-      success: false, 
-      summary: fallback 
+    return {
+      success: false,
+      summary: fallback,
     };
   }
 }

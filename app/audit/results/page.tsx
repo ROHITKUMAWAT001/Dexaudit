@@ -15,13 +15,23 @@ import { ReportSummary } from "@/components/audit/report/ReportSummary";
 import { ReportCharts } from "@/components/audit/report/ReportCharts";
 import { ReportBreakdownPage } from "@/components/audit/report/ReportBreakdownPage";
 import { ReportMethodology } from "@/components/audit/report/ReportMethodology";
-import { runSurgicalAudit, AuditResult } from "@/lib/audit-engine";
+import { runSurgicalAudit } from "@/lib/audit-engine";
 import { encodeAuditData } from "@/lib/share";
 import { generateAuditSummary } from "@/lib/actions/ai";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Share2, Download, Rocket, ArrowRight, Check, Twitter, Linkedin, Sparkles, Loader2 } from "lucide-react";
+import {
+  Share2,
+  Download,
+  Rocket,
+  ArrowRight,
+  Check,
+  Twitter,
+  Linkedin,
+  Sparkles,
+  Loader2,
+} from "lucide-react";
 import { toast } from "sonner";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -36,7 +46,6 @@ export default function ResultsPage() {
   const [aiSummary, setAiSummary] = useState("");
   const [showHighSavingsModal, setShowHighSavingsModal] = useState(false);
   const [hasShownModal, setHasShownModal] = useState(false);
-  const dashboardRef = React.useRef<HTMLDivElement>(null);
   const { selectedTools, teamSize, toolDetails } = useAuditStore();
 
   // Generate results once scanning is done
@@ -79,7 +88,7 @@ export default function ResultsPage() {
   const handleDownloadPDF = async () => {
     setIsDownloading(true);
     toast.info("Assembling professional boardroom report...");
-    
+
     try {
       const pdf = new jsPDF("p", "pt", "a4");
       const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -87,21 +96,21 @@ export default function ResultsPage() {
 
       // IDs of components to capture
       const componentIds = ["report-cover", "report-summary", "report-charts"];
-      
+
       // Calculate breakdown pages (3 tools per page)
       const toolsPerPage = 3;
       const breakdownPageCount = Math.ceil(auditResults.length / toolsPerPage);
-      
+
       for (let i = 0; i < breakdownPageCount; i++) {
         componentIds.push(`report-breakdown-${i}`);
       }
-      
+
       componentIds.push("report-methodology");
 
       for (let i = 0; i < componentIds.length; i++) {
         const id = componentIds[i];
         const element = document.getElementById(id);
-        
+
         if (!element) continue;
 
         const canvas = await html2canvas(element, {
@@ -114,9 +123,9 @@ export default function ResultsPage() {
         });
 
         const imgData = canvas.toDataURL("image/png", 1.0);
-        
+
         if (i > 0) pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight, undefined, "FAST");
       }
 
       pdf.save(`DexAudit-Boardroom-Report-${new Date().getTime()}.pdf`);
@@ -130,9 +139,8 @@ export default function ResultsPage() {
   };
 
   // Helper to chunk results for multi-page breakdown
-  const resultChunks = Array.from(
-    { length: Math.ceil(auditResults.length / 3) }, 
-    (v, i) => auditResults.slice(i * 3, i * 3 + 3)
+  const resultChunks = Array.from({ length: Math.ceil(auditResults.length / 3) }, (v, i) =>
+    auditResults.slice(i * 3, i * 3 + 3)
   );
 
   return (
@@ -140,15 +148,22 @@ export default function ResultsPage() {
       <Navbar />
 
       {/* HIDDEN REPORT ENGINE - OFF SCREEN */}
-      <div className="fixed -left-[9999px] top-0 pointer-events-none opacity-0 select-none overflow-hidden">
+      <div className="pointer-events-none fixed -left-[9999px] top-0 select-none overflow-hidden opacity-0">
         <div id="report-cover">
-          <ReportCover auditId="DX-4402-991" timestamp={new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} />
+          <ReportCover
+            auditId="DX-4402-991"
+            timestamp={new Date().toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            })}
+          />
         </div>
         <div id="report-summary">
-          <ReportSummary 
-            summary={aiSummary} 
-            totalCurrent={totalMonthlyCurrent} 
-            totalOptimized={totalMonthlyOptimized} 
+          <ReportSummary
+            summary={aiSummary}
+            totalCurrent={totalMonthlyCurrent}
+            totalOptimized={totalMonthlyOptimized}
             totalSavings={totalAnnualSavings}
             teamSize={teamSize}
           />
@@ -187,52 +202,57 @@ export default function ResultsPage() {
               className="space-y-12"
             >
               {isLocked && <EmailAuditGate onUnlock={() => setIsLocked(false)} />}
-              
-              <HighSavingsModal 
-                isOpen={showHighSavingsModal} 
-                onOpenChange={setShowHighSavingsModal} 
+
+              <HighSavingsModal
+                isOpen={showHighSavingsModal}
+                onOpenChange={setShowHighSavingsModal}
                 savings={totalAnnualSavings}
               />
-              
+
               {/* Header Actions */}
               <div className="flex flex-col justify-between gap-6 border-b border-slate-200 pb-8 sm:flex-row sm:items-center">
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900">
+                  <h1 className="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">
                     Audit Dashboard
                   </h1>
-                  <p className="mt-1 text-xs sm:text-sm font-medium text-slate-500">
+                  <p className="mt-1 text-xs font-medium text-slate-500 sm:text-sm">
                     Surgical report for your engineering AI stack.
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                  <Button 
-                    variant="outline" 
-                    className="h-10 sm:h-11 px-3 sm:px-4 rounded-xl bg-white text-xs sm:text-sm font-bold hover:bg-slate-50"
+                  <Button
+                    variant="outline"
+                    className="h-10 rounded-xl bg-white px-3 text-xs font-bold hover:bg-slate-50 sm:h-11 sm:px-4 sm:text-sm"
                     onClick={handleDownloadPDF}
                     disabled={isDownloading}
                   >
                     {isDownloading ? (
-                      <Loader2 className="mr-2 h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
+                      <Loader2 className="mr-2 h-3 w-3 animate-spin sm:h-4 sm:w-4" />
                     ) : (
                       <Download className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                     )}
                     PDF Report
                   </Button>
-                  <Button variant="outline" className="h-10 sm:h-11 px-3 sm:px-4 rounded-xl bg-white text-xs sm:text-sm font-bold hover:bg-slate-50">
-                    <Twitter className="mr-2 h-3 w-3 sm:h-4 sm:w-4 text-[#1DA1F2]" />
-                    X
+                  <Button
+                    variant="outline"
+                    className="h-10 rounded-xl bg-white px-3 text-xs font-bold hover:bg-slate-50 sm:h-11 sm:px-4 sm:text-sm"
+                  >
+                    <Twitter className="mr-2 h-3 w-3 text-[#1DA1F2] sm:h-4 sm:w-4" />X
                   </Button>
-                  <Button variant="outline" className="h-10 sm:h-11 px-3 sm:px-4 rounded-xl bg-white text-xs sm:text-sm font-bold hover:bg-slate-50">
-                    <Linkedin className="mr-2 h-3 w-3 sm:h-4 sm:w-4 text-[#0A66C2]" />
+                  <Button
+                    variant="outline"
+                    className="h-10 rounded-xl bg-white px-3 text-xs font-bold hover:bg-slate-50 sm:h-11 sm:px-4 sm:text-sm"
+                  >
+                    <Linkedin className="mr-2 h-3 w-3 text-[#0A66C2] sm:h-4 sm:w-4" />
                     Post
                   </Button>
                   <Button
                     onClick={handleShare}
-                    className="h-10 sm:h-11 px-3 sm:px-5 min-w-[100px] sm:min-w-[140px] rounded-xl text-xs sm:text-sm font-bold shadow-lg shadow-primary/20"
+                    className="h-10 min-w-[100px] rounded-xl px-3 text-xs font-bold shadow-lg shadow-primary/20 sm:h-11 sm:min-w-[140px] sm:px-5 sm:text-sm"
                   >
                     {copied ? (
                       <>
-                        <Check className="mr-2 h-3 w-3 sm:h-4 sm:w-4 text-emerald-400" />
+                        <Check className="mr-2 h-3 w-3 text-emerald-400 sm:h-4 sm:w-4" />
                         Copied
                       </>
                     ) : (
@@ -246,32 +266,32 @@ export default function ResultsPage() {
               </div>
 
               {/* PDF EXPORT AREA: FROM AI SUMMARY TO LAST BREAKDOWN */}
-              <div className="space-y-8 sm:space-y-12 bg-white/40 p-1 rounded-[2rem] sm:rounded-[3rem] -m-1">
+              <div className="-m-1 space-y-8 rounded-[2rem] bg-white/40 p-1 sm:space-y-12 sm:rounded-[3rem]">
                 {/* AI Summary Section */}
-                <div className="rounded-2xl sm:rounded-3xl border border-primary/10 bg-white p-5 sm:p-8 shadow-sm">
-                  <div className="mb-4 sm:mb-6 flex items-center gap-3">
-                    <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <div className="rounded-2xl border border-primary/10 bg-white p-5 shadow-sm sm:rounded-3xl sm:p-8">
+                  <div className="mb-4 flex items-center gap-3 sm:mb-6">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary sm:h-8 sm:w-8">
                       <Sparkles size={16} className="sm:w-[18px]" />
                     </div>
-                    <h2 className="text-base sm:text-lg font-black tracking-tight text-slate-900">
+                    <h2 className="text-base font-black tracking-tight text-slate-900 sm:text-lg">
                       AI-Generated Intelligence Summary
                     </h2>
                   </div>
-                  
+
                   {aiLoading ? (
                     <div className="space-y-3">
-                      <Skeleton className="h-3 sm:h-4 w-full" />
-                      <Skeleton className="h-3 sm:h-4 w-[92%]" />
-                      <Skeleton className="h-3 sm:h-4 w-[95%]" />
-                      <Skeleton className="h-3 sm:h-4 w-[40%] mt-2 sm:mt-4" />
+                      <Skeleton className="h-3 w-full sm:h-4" />
+                      <Skeleton className="h-3 w-[92%] sm:h-4" />
+                      <Skeleton className="h-3 w-[95%] sm:h-4" />
+                      <Skeleton className="mt-2 h-3 w-[40%] sm:mt-4 sm:h-4" />
                     </div>
                   ) : (
                     <div className="relative">
-                      <p className="text-base sm:text-lg font-medium leading-relaxed text-slate-600">
+                      <p className="text-base font-medium leading-relaxed text-slate-600 sm:text-lg">
                         {aiSummary}
                       </p>
-                      <div className="mt-4 sm:mt-6 flex items-center gap-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-primary">
-                        <span className="flex h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-primary animate-pulse" />
+                      <div className="mt-4 flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-primary sm:mt-6 sm:text-[10px]">
+                        <span className="flex h-1.5 w-1.5 animate-pulse rounded-full bg-primary sm:h-2 sm:w-2" />
                         Analysis complete via Google Gemini Flash Latest
                       </div>
                     </div>

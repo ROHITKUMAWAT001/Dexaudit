@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Github, Gitlab, Terminal, Lock, ArrowRight, UserPlus, LogIn } from "lucide-react";
+import { Mail, Github, Gitlab, Terminal, Lock, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { login, signup } from "@/lib/actions/auth";
 
@@ -35,16 +35,16 @@ export function AuthModal({ children, onOpenChange }: AuthModalProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    
+
     const formData = new FormData(e.currentTarget);
     const action = isSignUp ? signup : login;
-    
+
     const result = await action(formData);
 
     if (result.success) {
       toast.success(isSignUp ? "Account created successfully!" : "Logged in successfully!");
       handleOpenChange(false);
-      
+
       // Force a hard refresh to ensure the Navbar picks up the new session immediately
       setTimeout(() => {
         window.location.reload();
@@ -60,9 +60,7 @@ export function AuthModal({ children, onOpenChange }: AuthModalProps) {
       <DialogTrigger asChild>
         {children || <Button variant="outline">Sign In</Button>}
       </DialogTrigger>
-      <DialogContent
-        className="overflow-hidden border-none p-0 shadow-2xl sm:max-w-[400px] rounded-[2rem]"
-      >
+      <DialogContent className="overflow-hidden rounded-[2rem] border-none p-0 shadow-2xl sm:max-w-[400px]">
         <div className="p-8">
           <DialogHeader className="mb-8">
             <div className="mb-6 flex justify-center">
@@ -74,8 +72,8 @@ export function AuthModal({ children, onOpenChange }: AuthModalProps) {
               {isSignUp ? "Create Account" : "Welcome back"}
             </DialogTitle>
             <DialogDescription className="mt-2 px-4 text-center text-sm font-medium leading-relaxed text-slate-500">
-              {isSignUp 
-                ? "Join DexAudit to track your AI infrastructure spend surgically." 
+              {isSignUp
+                ? "Join DexAudit to track your AI infrastructure spend surgically."
                 : "Enter your credentials to access your surgical audit dashboard."}
             </DialogDescription>
           </DialogHeader>
@@ -84,7 +82,10 @@ export function AuthModal({ children, onOpenChange }: AuthModalProps) {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-4">
                 <div className="grid gap-1.5">
-                  <Label htmlFor="email" className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                  <Label
+                    htmlFor="email"
+                    className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400"
+                  >
                     Work Email
                   </Label>
                   <div className="relative">
@@ -95,12 +96,15 @@ export function AuthModal({ children, onOpenChange }: AuthModalProps) {
                       type="email"
                       placeholder="name@company.com"
                       required
-                      className="h-12 border-slate-200 bg-slate-50/50 pl-11 focus:ring-primary/20 rounded-xl"
+                      className="h-12 rounded-xl border-slate-200 bg-slate-50/50 pl-11 focus:ring-primary/20"
                     />
                   </div>
                 </div>
                 <div className="grid gap-1.5">
-                  <Label htmlFor="pass" className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                  <Label
+                    htmlFor="pass"
+                    className="ml-1 text-[10px] font-black uppercase tracking-widest text-slate-400"
+                  >
                     Password
                   </Label>
                   <div className="relative">
@@ -112,24 +116,28 @@ export function AuthModal({ children, onOpenChange }: AuthModalProps) {
                       placeholder="••••••••"
                       required
                       minLength={6}
-                      className="h-12 border-slate-200 bg-slate-50/50 pl-11 focus:ring-primary/20 rounded-xl"
+                      className="h-12 rounded-xl border-slate-200 bg-slate-50/50 pl-11 focus:ring-primary/20"
                     />
                   </div>
                 </div>
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="h-14 w-full text-base font-black shadow-xl shadow-primary/20 transition-all hover:bg-primary/90 active:scale-[0.98] rounded-xl"
+                  className="h-14 w-full rounded-xl text-base font-black shadow-xl shadow-primary/20 transition-all hover:bg-primary/90 active:scale-[0.98]"
                 >
-                  {loading ? "Authenticating..." : isSignUp ? "Create Free Account" : "Sign In to Dashboard"}
+                  {loading
+                    ? "Authenticating..."
+                    : isSignUp
+                      ? "Create Free Account"
+                      : "Sign In to Dashboard"}
                   {!loading && <ArrowRight className="ml-2 h-4 w-4 opacity-70" />}
                 </Button>
               </div>
             </form>
 
-            <button 
+            <button
               onClick={() => setIsSignUp(!isSignUp)}
-              className="text-sm font-bold text-primary hover:text-primary/80 transition-colors"
+              className="text-sm font-bold text-primary transition-colors hover:text-primary/80"
             >
               {isSignUp ? "Already have an account? Log in" : "Don't have an account? Sign up"}
             </button>
@@ -146,7 +154,7 @@ export function AuthModal({ children, onOpenChange }: AuthModalProps) {
             <div className="grid grid-cols-2 gap-4">
               <Button
                 variant="outline"
-                className="h-12 w-full border-slate-200 bg-white font-bold text-slate-700 shadow-sm hover:bg-slate-50 rounded-xl"
+                className="h-12 w-full rounded-xl border-slate-200 bg-white font-bold text-slate-700 shadow-sm hover:bg-slate-50"
                 type="button"
                 onClick={() => toast.info("GitHub SSO integration pending verified domain.")}
               >
@@ -155,7 +163,7 @@ export function AuthModal({ children, onOpenChange }: AuthModalProps) {
               </Button>
               <Button
                 variant="outline"
-                className="h-12 w-full border-slate-200 bg-white font-bold text-slate-700 shadow-sm hover:bg-slate-50 rounded-xl"
+                className="h-12 w-full rounded-xl border-slate-200 bg-white font-bold text-slate-700 shadow-sm hover:bg-slate-50"
                 type="button"
                 onClick={() => toast.info("GitLab SSO integration pending verified domain.")}
               >
@@ -165,7 +173,7 @@ export function AuthModal({ children, onOpenChange }: AuthModalProps) {
             </div>
           </div>
 
-          <div className="mt-10 text-center text-[11px] font-medium leading-relaxed text-slate-400 uppercase tracking-tight">
+          <div className="mt-10 text-center text-[11px] font-medium uppercase leading-relaxed tracking-tight text-slate-400">
             Protected by industrial-grade security.
           </div>
         </div>

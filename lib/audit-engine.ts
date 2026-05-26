@@ -29,7 +29,8 @@ export function runSurgicalAudit(
     const detail = toolDetails[id] || { monthlySpend: 0, seats: 0, plan: "" };
 
     let optimizedSpend = detail.monthlySpend;
-    let recommendation = "Your current configuration is highly optimized. We see no immediate arbitrage opportunities.";
+    let recommendation =
+      "Your current configuration is highly optimized. We see no immediate arbitrage opportunities.";
     let confidence = 0.98;
     let arbitrageFound = false;
 
@@ -57,25 +58,25 @@ export function runSurgicalAudit(
 
         case "claude":
           if ((detail.plan === "Team" || detail.plan === "Business") && size < 5) {
-            optimizedSpend = size * 20; 
+            optimizedSpend = size * 20;
             const wastage = detail.monthlySpend - optimizedSpend;
             // Only suggest if they are actually overpaying (e.g. paying $150 minimum for 2 users)
             if (wastage > 0) {
-                recommendation = `Floor Arbitrage: Claude Team has a 5-seat minimum ($150). For ${size} users, individual Pro accounts ($20) remove the arbitrary floor, saving $${Math.round(wastage)}/mo.`;
-                confidence = 0.98;
-                arbitrageFound = true;
+              recommendation = `Floor Arbitrage: Claude Team has a 5-seat minimum ($150). For ${size} users, individual Pro accounts ($20) remove the arbitrary floor, saving $${Math.round(wastage)}/mo.`;
+              confidence = 0.98;
+              arbitrageFound = true;
             }
           }
           break;
 
         case "chatgpt":
           if ((detail.plan === "Team" || detail.plan === "Business") && size < 2) {
-            optimizedSpend = 20; 
+            optimizedSpend = 20;
             recommendation = `Single Seat Arbitrage: ChatGPT Team requires a 2-seat minimum ($60). A single Plus account ($20) provides identical reasoning capabilities for solo use.`;
             confidence = 0.99;
             arbitrageFound = true;
           } else if (detail.plan === "Enterprise" && size < 50) {
-            optimizedSpend = size * 30; 
+            optimizedSpend = size * 30;
             recommendation = `Enterprise Bloat: At ${size} seats, Enterprise-tier overhead is unjustified. The Team tier ($30) provides SOC 2 and data privacy without custom contract premiums.`;
             confidence = 0.88;
             arbitrageFound = true;
@@ -104,7 +105,7 @@ export function runSurgicalAudit(
           if (detail.plan === "Team" && size <= 2) {
             optimizedSpend = size * 20;
             recommendation = `Tier Rationalization: v0 Team tier ($30) is unnecessary for a solo developer or duo. The Premium tier ($20) includes sufficient credits for $10 less per seat.`;
-            confidence = 0.90;
+            confidence = 0.9;
             arbitrageFound = true;
           }
           break;
