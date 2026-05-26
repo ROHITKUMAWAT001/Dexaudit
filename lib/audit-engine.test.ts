@@ -21,4 +21,40 @@ describe("DexAudit Mathematical Engine", () => {
     expect(cursorResult.savings).toBe(60);
     expect(cursorResult.recommendation).toContain("Ghost seats detected");
   });
+
+  // Test 2: Cursor Plan Mismatch
+  it("should recommend downgrading Cursor Business to Pro for small teams", () => {
+    const selectedTools = ["cursor"];
+    const toolDetails: Record<string, ToolDetail> = {
+      cursor: { plan: "Business", monthlySpend: 160, seats: 4 },
+    };
+    const teamSize = "4";
+
+    const results = runSurgicalAudit(selectedTools, toolDetails, teamSize);
+    const cursorResult = results[0];
+
+    // 4 devs on Business ($40/ea) = $160.
+    // Downgrade to Pro ($20/ea) = $80.
+    expect(cursorResult.optimizedSpend).toBe(80);
+    expect(cursorResult.savings).toBe(80);
+    expect(cursorResult.recommendation).toContain("Plan Overkill");
+  });
+
+  // Test 3: Specific Plan Arbitrage (No ghost seats)
+  it("should catch Claude floor arbitrage when seats match team size but plan is overkill", () => {
+    const selectedTools = ["claude"];
+    const toolDetails: Record<string, ToolDetail> = {
+      // 2 seats for 2 devs, but paying $150 minimum (manual override case)
+      claude: { plan: "Team", monthlySpend: 150, seats: 2 },
+    };
+    const teamSize = "2";
+
+    const results = runSurgicalAudit(selectedTools, toolDetails, teamSize);
+    const claudeResult = results[0];
+
+    // Individual Pro is 2 * $20 = $40.
+    expect(claudeResult.optimizedSpend).toBe(40);
+    expect(claudeResult.savings).toBe(110);
+    expect(claudeResult.recommendation).toContain("Floor Arbitrage");
+  });
 });
