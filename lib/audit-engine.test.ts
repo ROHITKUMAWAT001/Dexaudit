@@ -92,4 +92,35 @@ describe("DexAudit Mathematical Engine", () => {
     expect(chatgptResult.savings).toBe(300);
     expect(chatgptResult.recommendation).toContain("Volume Liquidity");
   });
+
+  // Test 6: Zero Spend Handling
+  it("should handle zero spend gracefully without crashing", () => {
+    const selectedTools = ["gemini"];
+    const toolDetails: Record<string, ToolDetail> = {
+      gemini: { plan: "Free", monthlySpend: 0, seats: 0 },
+    };
+    const teamSize = "10";
+
+    const results = runSurgicalAudit(selectedTools, toolDetails, teamSize);
+    const geminiResult = results[0];
+
+    expect(geminiResult.optimizedSpend).toBe(0);
+    expect(geminiResult.savings).toBe(0);
+    expect(geminiResult.recommendation).toContain("highly optimized");
+  });
+
+  // Test 7: Failsafe Bounds
+  it("should never recommend an optimized spend higher than current spend", () => {
+    const selectedTools = ["v0"];
+    const toolDetails: Record<string, ToolDetail> = {
+      v0: { plan: "Premium", monthlySpend: 20, seats: 1 },
+    };
+    const teamSize = "1";
+
+    const results = runSurgicalAudit(selectedTools, toolDetails, teamSize);
+    const v0Result = results[0];
+
+    expect(v0Result.optimizedSpend).toBeLessThanOrEqual(v0Result.currentSpend);
+    expect(v0Result.savings).toBeGreaterThanOrEqual(0);
+  });
 });
