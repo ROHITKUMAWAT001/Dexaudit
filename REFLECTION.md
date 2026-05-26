@@ -33,7 +33,7 @@ If given a second week, I would focus entirely on **Automation and Data Defensib
 
 ### 4. How you used AI tools
 
-**Tools Used:** Cursor (Claude 3.5 Sonnet) and Google Gemini Flash Latest (via API).
+**Tools Used:** VsCode(Gemini Cli) and Google Gemini Flash Latest (via API).
 **Tasks Delegated:** 
 - Generating the boilerplate Tailwind CSS classes for the UI components to maintain high velocity.
 - Writing the regex logic for validating the honeypot fields.
