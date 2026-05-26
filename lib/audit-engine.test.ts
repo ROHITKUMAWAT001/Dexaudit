@@ -57,4 +57,39 @@ describe("DexAudit Mathematical Engine", () => {
     expect(claudeResult.savings).toBe(110);
     expect(claudeResult.recommendation).toContain("Floor Arbitrage");
   });
+
+  // Test 4: Copilot Feature Right-sizing
+  it("should recommend Copilot Business over Enterprise for moderate teams", () => {
+    const selectedTools = ["github-copilot"];
+    const toolDetails: Record<string, ToolDetail> = {
+      "github-copilot": { plan: "Enterprise", monthlySpend: 390, seats: 10 },
+    };
+    const teamSize = "10";
+
+    const results = runSurgicalAudit(selectedTools, toolDetails, teamSize);
+    const copilotResult = results[0];
+
+    // 10 devs on Enterprise ($39/ea) = $390.
+    // Downgrade to Business ($19/ea) = $190.
+    expect(copilotResult.optimizedSpend).toBe(190);
+    expect(copilotResult.savings).toBe(200);
+    expect(copilotResult.recommendation).toContain("Feature Right-sizing");
+  });
+
+  // Test 5: Volume Discount Catch-all
+  it("should apply 15% volume discount for high-spend unoptimized tools", () => {
+    const selectedTools = ["chatgpt"];
+    const toolDetails: Record<string, ToolDetail> = {
+      chatgpt: { plan: "Enterprise", monthlySpend: 2000, seats: 100 },
+    };
+    const teamSize = "100";
+
+    const results = runSurgicalAudit(selectedTools, toolDetails, teamSize);
+    const chatgptResult = results[0];
+
+    // 2000 * 0.85 = 1700.
+    expect(chatgptResult.optimizedSpend).toBe(1700);
+    expect(chatgptResult.savings).toBe(300);
+    expect(chatgptResult.recommendation).toContain("Volume Liquidity");
+  });
 });
