@@ -123,4 +123,37 @@ describe("DexAudit Mathematical Engine", () => {
     expect(v0Result.optimizedSpend).toBeLessThanOrEqual(v0Result.currentSpend);
     expect(v0Result.savings).toBeGreaterThanOrEqual(0);
   });
+
+  // Test 8: Fully Optimized Stack
+  it("should return 0 savings for a perfectly optimized configuration", () => {
+    const selectedTools = ["cursor"];
+    const toolDetails: Record<string, ToolDetail> = {
+      cursor: { plan: "Pro", monthlySpend: 20, seats: 1 },
+    };
+    const teamSize = "1";
+
+    const results = runSurgicalAudit(selectedTools, toolDetails, teamSize);
+    const cursorResult = results[0];
+
+    expect(cursorResult.savings).toBe(0);
+    expect(cursorResult.optimizedSpend).toBe(20);
+  });
+
+  // Test 9: ChatGPT Solo User Arbitrage (No ghost seats)
+  it("should recommend Plus over Team for solo ChatGPT users when seats match size", () => {
+    const selectedTools = ["chatgpt"];
+    const toolDetails: Record<string, ToolDetail> = {
+      // 1 user on Team (manual override case where they pay $60 minimum for 1 seat)
+      chatgpt: { plan: "Team", monthlySpend: 60, seats: 1 },
+    };
+    const teamSize = "1";
+
+    const results = runSurgicalAudit(selectedTools, toolDetails, teamSize);
+    const chatgptResult = results[0];
+
+    // Downgrade to Plus = $20.
+    expect(chatgptResult.optimizedSpend).toBe(20);
+    expect(chatgptResult.savings).toBe(40);
+    expect(chatgptResult.recommendation).toContain("Single Seat Arbitrage");
+  });
 });
