@@ -4,6 +4,8 @@
 
 **Industrial-Grade AI Spend Intelligence for Engineering Leaders**
 
+*Last Production Deployment: May 26, 2026*
+
 Detect ghost seats, arbitrage AI plans, and stop burning runway on unused subscriptions.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
